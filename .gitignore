@@ -31,7 +31,7 @@ Thumbs.db
 
 /out/
 /build/
-/target/
+/target/ßß
 
 ### NetBeans ###
 /nbproject/private/
@@ -43,9 +43,7 @@ Thumbs.db
 ### VS Code ###
 .vscode/
 
-application-*.yml
-application-*.yaml
-application-*.properties
+src/main/resources/application.yml
 
 *.swp
 *.swo
