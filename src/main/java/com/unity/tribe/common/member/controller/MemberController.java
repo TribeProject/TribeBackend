@@ -3,6 +3,7 @@ package com.unity.tribe.common.member.controller;
 import com.unity.tribe.common.member.dto.MemberResponseDto;
 import com.unity.tribe.core.ApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collections;
 import java.util.List;
 
+@Tag(name = "모임 회원 API")
 @RestController
 @RequestMapping("/api/members")
 public class MemberController {
