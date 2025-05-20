@@ -9,5 +9,4 @@ public class TribeApplication {
     public static void main(String[] args) {
         SpringApplication.run(TribeApplication.class, args);
     }
-
 }
