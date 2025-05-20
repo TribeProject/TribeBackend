@@ -48,4 +48,5 @@ src/main/resources/application.yml
 *.swpß
 *.swo
 
-.gradle
+./gradlew.bat
+/gradle/wrapper
