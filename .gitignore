@@ -45,5 +45,7 @@ Thumbs.db
 
 src/main/resources/application.yml
 
-*.swp
+*.swpß
 *.swo
+
+.gradle
