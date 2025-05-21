@@ -1,4 +1,4 @@
-package com.unity.tribe.domain.user.domain;
+package com.unity.tribe.domain.user.entity;
 
 import jakarta.persistence.*;
 

@@ -1,4 +1,4 @@
-package com.unity.tribe.domain.search.domain;
+package com.unity.tribe.domain.search.entity;
 
 import jakarta.persistence.*;
 

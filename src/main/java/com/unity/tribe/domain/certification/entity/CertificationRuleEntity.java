@@ -1,4 +1,4 @@
-package com.unity.tribe.domain.certification.domain;
+package com.unity.tribe.domain.certification.entity;
 
 import jakarta.persistence.*;
 

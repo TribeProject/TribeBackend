@@ -1,4 +1,4 @@
-package com.unity.tribe.domain.auth.domain;
+package com.unity.tribe.domain.auth.entity;
 
 import jakarta.persistence.*;
 

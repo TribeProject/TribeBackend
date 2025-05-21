@@ -1,4 +1,4 @@
-package com.unity.tribe.domain.admin.domain;
+package com.unity.tribe.domain.admin.entity;
 
 import jakarta.persistence.*;
 
