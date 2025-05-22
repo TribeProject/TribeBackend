@@ -1,16 +1,18 @@
 package com.unity.tribe.domain.admin.controller;
 
 
-import com.unity.tribe.domain.group.dto.GroupResponseDto;
-import com.unity.tribe.domain.admin.dto.response.UserResponseDto;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
+import com.unity.tribe.domain.admin.dto.response.UserResponseDto;
+import com.unity.tribe.domain.group.dto.GroupResponseDto;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "관리자 BO API")
 @RestController

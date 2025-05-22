@@ -77,8 +77,8 @@ public class GoalEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
         GoalEntity that = (GoalEntity) o;
         return Objects.equals(id, that.id) && Objects.equals(groupId, that.groupId) && Objects.equals(field2, that.field2) && Objects.equals(field3, that.field3) && Objects.equals(field4, that.field4) && Objects.equals(field5, that.field5);
     }

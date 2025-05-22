@@ -67,8 +67,8 @@ public class SearchEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
         SearchEntity that = (SearchEntity) o;
         return searchId == that.searchId && priority == that.priority && Objects.equals(keyword, that.keyword) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }

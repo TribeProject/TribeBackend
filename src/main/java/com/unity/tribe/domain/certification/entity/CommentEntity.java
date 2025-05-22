@@ -100,8 +100,8 @@ public class CommentEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
         CommentEntity that = (CommentEntity) o;
         return commentId == that.commentId && depth == that.depth && Objects.equals(userId, that.userId) && Objects.equals(feedId, that.feedId) && Objects.equals(parentCommentId, that.parentCommentId) && Objects.equals(status, that.status) && Objects.equals(createdAt, that.createdAt) && Objects.equals(deletedAt, that.deletedAt);
     }

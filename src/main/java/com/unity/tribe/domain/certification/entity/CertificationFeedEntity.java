@@ -111,8 +111,8 @@ public class CertificationFeedEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
         CertificationFeedEntity that = (CertificationFeedEntity) o;
         return Objects.equals(feedId, that.feedId) && Objects.equals(groupId, that.groupId) && Objects.equals(userId, that.userId) && Objects.equals(feedType, that.feedType) && Objects.equals(image, that.image) && Objects.equals(contentText, that.contentText) && Objects.equals(status, that.status) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }

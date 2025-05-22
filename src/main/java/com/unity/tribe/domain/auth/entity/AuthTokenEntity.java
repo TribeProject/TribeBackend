@@ -89,8 +89,8 @@ public class AuthTokenEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
         AuthTokenEntity that = (AuthTokenEntity) o;
         return authTokenId == that.authTokenId && Objects.equals(userId, that.userId) && Objects.equals(accessToken, that.accessToken) && Objects.equals(refreshToken, that.refreshToken) && Objects.equals(expiresAt, that.expiresAt) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }

@@ -199,8 +199,8 @@ public class GroupEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
         GroupEntity that = (GroupEntity) o;
         return categoryId == that.categoryId && participants == that.participants && minAge == that.minAge && maxAge == that.maxAge && Objects.equals(groupId, that.groupId) && Objects.equals(hostId, that.hostId) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(thumbnail, that.thumbnail) && Objects.equals(groupType, that.groupType) && Objects.equals(meetingType, that.meetingType) && Objects.equals(locationAddress, that.locationAddress) && Objects.equals(genderRestriction, that.genderRestriction) && Objects.equals(status, that.status) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt) && Objects.equals(expiredAt, that.expiredAt);
     }
