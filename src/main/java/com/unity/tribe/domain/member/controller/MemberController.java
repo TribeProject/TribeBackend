@@ -1,17 +1,19 @@
 package com.unity.tribe.domain.member.controller;
 
-import com.unity.tribe.domain.member.dto.MemberResponseDto;
-import com.unity.tribe.common.model.ApiResponseDto;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
-import java.util.List;
+import com.unity.tribe.common.model.ApiResponseDto;
+import com.unity.tribe.domain.member.dto.MemberResponseDto;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "모임 회원 API")
 @RestController

@@ -1,9 +1,9 @@
 package com.unity.tribe.domain.auth.entity;
 
-import jakarta.persistence.*;
-
 import java.sql.Timestamp;
 import java.util.Objects;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "social_account", schema = "tribe", catalog = "")
@@ -122,8 +122,12 @@ public class SocialAccountEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SocialAccountEntity that = (SocialAccountEntity) o;
         return providerUserId == that.providerUserId && Objects.equals(userId, that.userId) && Objects.equals(provider, that.provider) && Objects.equals(email, that.email) && Objects.equals(name, that.name) && Objects.equals(profileImage, that.profileImage) && Objects.equals(accessToken, that.accessToken) && Objects.equals(refreshToken, that.refreshToken) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }
