@@ -47,16 +47,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponseDto.class), examples = @ExampleObject(value = """
                 {
-                  "status": 200,
-                  "message": "요청이 성공했습니다.",
-                  "result": true,
-                  "data": {
+                "status": 200,
+                "message": "요청이 성공했습니다.",
+                "result": true,
+                "data": {
                     "page": 0,
                     "size": 2,
                     "totalElements": 2,
                     "totalPages": 1,
                     "data": [
-                      {
+                    {
                         "groupId": "01HGW1MHT3RJYK5MXRZ6P5QACN",
                         "title": "모임명",
                         "description": "모임 설명",
@@ -76,8 +76,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                         "maxAge": 40,
                         "createdAt": "2024-11-15T09:00:00",
                         "updatedAt": "2024-11-20T14:30:00"
-                      },
-                      {
+                    },
+                    {
                         "groupId": "01HGW1MHT3RJYK5MXRZ6P5QACO",
                         "title": "모임명",
                         "description": "모임 설명",
@@ -97,25 +97,25 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                         "maxAge": 50,
                         "createdAt": "2024-11-10T10:00:00",
                         "updatedAt": "2024-11-10T10:00:00"
-                      }
+                    }
                     ]
-                  }
+                }
                 }
                 """))),
         @ApiResponse(responseCode = "401", description = "인증 실패", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponseDto.class), examples = @ExampleObject(value = """
                 {
-                  "status": 401,
-                  "message": "인증이 필요합니다.",
-                  "result": false,
-                  "data": null
+                "status": 401,
+                "message": "인증이 필요합니다.",
+                "result": false,
+                "data": null
                 }
                 """))),
         @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponseDto.class), examples = @ExampleObject(value = """
                 {
-                  "status": 500,
-                  "message": "서버 오류가 발생했습니다.",
-                  "result": false,
-                  "data": null
+                "status": 500,
+                "message": "서버 오류가 발생했습니다.",
+                "result": false,
+                "data": null
                 }
                 """)))
 })
