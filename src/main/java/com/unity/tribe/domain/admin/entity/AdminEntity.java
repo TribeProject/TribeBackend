@@ -3,12 +3,15 @@ package com.unity.tribe.domain.admin.entity;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "admin", schema = "tribe", catalog = "")
 public class AdminEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "user_id")
     private String userId;
@@ -100,14 +103,17 @@ public class AdminEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { 
-            return true; 
+        if (this == o) {
+            return true;
         }
         if (o == null || getClass() != o.getClass()) {
-            return false; 
+            return false;
         }
         AdminEntity that = (AdminEntity) o;
-        return Objects.equals(userId, that.userId) && Objects.equals(email, that.email) && Objects.equals(passwordHash, that.passwordHash) && Objects.equals(name, that.name) && Objects.equals(role, that.role) && Objects.equals(status, that.status) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        return Objects.equals(userId, that.userId) && Objects.equals(email, that.email)
+                && Objects.equals(passwordHash, that.passwordHash) && Objects.equals(name, that.name)
+                && Objects.equals(role, that.role) && Objects.equals(status, that.status)
+                && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override

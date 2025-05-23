@@ -3,12 +3,15 @@ package com.unity.tribe.domain.certification.entity;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "certification_feed", schema = "tribe", catalog = "")
 public class CertificationFeedEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "feed_id")
     private String feedId;
@@ -111,14 +114,18 @@ public class CertificationFeedEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { 
-            return true; 
+        if (this == o) {
+            return true;
         }
         if (o == null || getClass() != o.getClass()) {
-            return false; 
+            return false;
         }
         CertificationFeedEntity that = (CertificationFeedEntity) o;
-        return Objects.equals(feedId, that.feedId) && Objects.equals(groupId, that.groupId) && Objects.equals(userId, that.userId) && Objects.equals(feedType, that.feedType) && Objects.equals(image, that.image) && Objects.equals(contentText, that.contentText) && Objects.equals(status, that.status) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        return Objects.equals(feedId, that.feedId) && Objects.equals(groupId, that.groupId)
+                && Objects.equals(userId, that.userId) && Objects.equals(feedType, that.feedType)
+                && Objects.equals(image, that.image) && Objects.equals(contentText, that.contentText)
+                && Objects.equals(status, that.status) && Objects.equals(createdAt, that.createdAt)
+                && Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override

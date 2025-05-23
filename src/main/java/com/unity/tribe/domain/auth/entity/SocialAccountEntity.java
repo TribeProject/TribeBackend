@@ -3,12 +3,15 @@ package com.unity.tribe.domain.auth.entity;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "social_account", schema = "tribe", catalog = "")
 public class SocialAccountEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "user_id")
     private String userId;
@@ -129,11 +132,16 @@ public class SocialAccountEntity {
             return false;
         }
         SocialAccountEntity that = (SocialAccountEntity) o;
-        return providerUserId == that.providerUserId && Objects.equals(userId, that.userId) && Objects.equals(provider, that.provider) && Objects.equals(email, that.email) && Objects.equals(name, that.name) && Objects.equals(profileImage, that.profileImage) && Objects.equals(accessToken, that.accessToken) && Objects.equals(refreshToken, that.refreshToken) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        return providerUserId == that.providerUserId && Objects.equals(userId, that.userId)
+                && Objects.equals(provider, that.provider) && Objects.equals(email, that.email)
+                && Objects.equals(name, that.name) && Objects.equals(profileImage, that.profileImage)
+                && Objects.equals(accessToken, that.accessToken) && Objects.equals(refreshToken, that.refreshToken)
+                && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, provider, providerUserId, email, name, profileImage, accessToken, refreshToken, createdAt, updatedAt);
+        return Objects.hash(userId, provider, providerUserId, email, name, profileImage, accessToken, refreshToken,
+                createdAt, updatedAt);
     }
 }

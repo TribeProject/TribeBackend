@@ -1,94 +1,120 @@
 package com.unity.tribe.domain.group.entity;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "goal", schema = "tribe", catalog = "")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GoalEntity {
+
+    public enum GoalStatus {
+        ACTIVE, COMPLETED, FAILED
+    }
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id")
-    private String id;
+    @Column(name = "goal_id")
+    private Long goalId;
+
     @Basic
-    @Column(name = "group_id")
+    @Column(name = "group_id", nullable = false)
     private String groupId;
+
     @Basic
-    @Column(name = "Field2")
-    private String field2;
+    @Column(name = "certification_rule_id")
+    private Integer certificationRuleId;
+
     @Basic
-    @Column(name = "Field3")
-    private String field3;
+    @Column(name = "title", nullable = false)
+    private String title;
+
     @Basic
-    @Column(name = "Field4")
-    private String field4;
+    @Column(name = "description")
+    private String description;
+
     @Basic
-    @Column(name = "Field5")
-    private String field5;
+    @Column(name = "target_value", nullable = false)
+    private Integer targetValue;
 
-    public String getId() {
-        return id;
-    }
+    @Basic
+    @Column(name = "unit_type_id", nullable = false)
+    private Integer unitTypeId;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "unit_type_id", insertable = false, updatable = false)
+    private GoalUnitTypeEntity unitType;
 
-    public String getGroupId() {
-        return groupId;
-    }
+    @Basic
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private GoalStatus status;
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
+    @Basic
+    @Column(name = "start_date", nullable = false)
+    private Timestamp startDate;
 
-    public String getField2() {
-        return field2;
-    }
+    @Basic
+    @Column(name = "end_date")
+    private Timestamp endDate;
 
-    public void setField2(String field2) {
-        this.field2 = field2;
-    }
+    @Basic
+    @Column(name = "created_at", nullable = false)
+    private Timestamp createdAt;
 
-    public String getField3() {
-        return field3;
-    }
-
-    public void setField3(String field3) {
-        this.field3 = field3;
-    }
-
-    public String getField4() {
-        return field4;
-    }
-
-    public void setField4(String field4) {
-        this.field4 = field4;
-    }
-
-    public String getField5() {
-        return field5;
-    }
-
-    public void setField5(String field5) {
-        this.field5 = field5;
-    }
+    @Basic
+    @Column(name = "updated_at", nullable = false)
+    private Timestamp updatedAt;
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { 
-            return true; 
+        if (this == o) {
+            return true;
         }
         if (o == null || getClass() != o.getClass()) {
-            return false; 
+            return false;
         }
         GoalEntity that = (GoalEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(groupId, that.groupId) && Objects.equals(field2, that.field2) && Objects.equals(field3, that.field3) && Objects.equals(field4, that.field4) && Objects.equals(field5, that.field5);
+        return Objects.equals(goalId, that.goalId)
+                && Objects.equals(groupId, that.groupId)
+                && Objects.equals(certificationRuleId, that.certificationRuleId)
+                && Objects.equals(title, that.title)
+                && Objects.equals(description, that.description)
+                && Objects.equals(targetValue, that.targetValue)
+                && Objects.equals(unitTypeId, that.unitTypeId)
+                && Objects.equals(status, that.status)
+                && Objects.equals(startDate, that.startDate)
+                && Objects.equals(endDate, that.endDate)
+                && Objects.equals(createdAt, that.createdAt)
+                && Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, groupId, field2, field3, field4, field5);
+        return Objects.hash(goalId, groupId, certificationRuleId, title, description,
+                targetValue, unitTypeId, status, startDate, endDate,
+                createdAt, updatedAt);
     }
 }

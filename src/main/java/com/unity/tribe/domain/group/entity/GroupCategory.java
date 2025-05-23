@@ -16,16 +16,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "group_categories")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupCategory extends BaseEntity {
+
+    protected GroupCategory() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class GroupCategory extends BaseEntity {
     private String description;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Group> groups = new ArrayList<>();
+    private List<GroupEntity> groups = new ArrayList<>();
 
     @Builder
     public GroupCategory(GroupCategoryCode code, String name, String description) {

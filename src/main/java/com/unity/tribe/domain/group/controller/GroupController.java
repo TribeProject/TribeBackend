@@ -45,6 +45,9 @@ import com.unity.tribe.domain.group.service.GroupService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 그룹 관련 API를 처리하는 컨트롤러
+ */
 @RestController
 @RequestMapping("/api/v1/groups")
 @RequiredArgsConstructor
@@ -53,6 +56,13 @@ public class GroupController {
 
     private final GroupService groupService;
 
+    /**
+     * 전체 그룹 목록을 조회합니다.
+     * 
+     * @param pageable 페이지네이션 정보
+     * @param status   그룹 상태 필터
+     * @return 그룹 목록
+     */
     @GetMapping
     @GetGroups
     public ResponseEntity<ApiResponseDto<CommonPageDto<List<GroupListResponseDto>>>> getGroups(
@@ -63,6 +73,14 @@ public class GroupController {
         return ResponseEntity.ok(ApiResponseDto.success(groups));
     }
 
+    /**
+     * 카테고리별 그룹 목록을 조회합니다.
+     * 
+     * @param categoryId 카테고리 ID
+     * @param pageable   페이지네이션 정보
+     * @param status     그룹 상태 필터
+     * @return 카테고리별 그룹 목록
+     */
     @GetMapping("/category/{categoryId}")
     @GetGroupsByCategory
     public ResponseEntity<ApiResponseDto<CommonPageDto<List<GroupListResponseDto>>>> getGroupsByCategory(
@@ -75,6 +93,13 @@ public class GroupController {
         return ResponseEntity.ok(ApiResponseDto.success(groups));
     }
 
+    /**
+     * 키워드로 그룹을 검색합니다.
+     * 
+     * @param keyword  검색 키워드
+     * @param pageable 페이지네이션 정보
+     * @return 검색된 그룹 목록
+     */
     @GetMapping("/search")
     @GetGroup
     public ResponseEntity<ApiResponseDto<CommonPageDto<List<GroupListResponseDto>>>> searchGroups(
@@ -85,6 +110,12 @@ public class GroupController {
         return ResponseEntity.ok(ApiResponseDto.success(groups));
     }
 
+    /**
+     * 특정 그룹의 상세 정보를 조회합니다.
+     * 
+     * @param groupId 그룹 ID
+     * @return 그룹 상세 정보
+     */
     @GetMapping("/{groupId}")
     @GetGroup
     public ResponseEntity<ApiResponseDto<GroupDetailResponseDto>> getGroup(@PathVariable Long groupId) {
@@ -92,6 +123,13 @@ public class GroupController {
         return ResponseEntity.ok(ApiResponseDto.success(group));
     }
 
+    /**
+     * 새로운 그룹을 생성합니다.
+     * 
+     * @param request     그룹 생성 요청 정보
+     * @param userDetails 인증된 사용자 정보
+     * @return 생성된 그룹 정보
+     */
     @PostMapping
     @CreateGroup
     public ResponseEntity<ApiResponseDto<GroupDetailResponseDto>> createGroup(
@@ -103,6 +141,14 @@ public class GroupController {
                 .body(ApiResponseDto.success("그룹이 성공적으로 생성되었습니다.", group));
     }
 
+    /**
+     * 그룹 정보를 수정합니다.
+     * 
+     * @param groupId     그룹 ID
+     * @param request     그룹 수정 요청 정보
+     * @param userDetails 인증된 사용자 정보
+     * @return 수정된 그룹 정보
+     */
     @PutMapping("/{groupId}")
     @UpdateGroup
     public ResponseEntity<ApiResponseDto<GroupDetailResponseDto>> updateGroup(
@@ -114,6 +160,13 @@ public class GroupController {
         return ResponseEntity.ok(ApiResponseDto.success("그룹이 성공적으로 수정되었습니다.", group));
     }
 
+    /**
+     * 그룹을 삭제합니다.
+     * 
+     * @param groupId     그룹 ID
+     * @param userDetails 인증된 사용자 정보
+     * @return 삭제 결과
+     */
     @DeleteMapping("/{groupId}")
     @DeleteGroup
     public ResponseEntity<ApiResponseDto<Void>> deleteGroup(
@@ -124,6 +177,13 @@ public class GroupController {
         return ResponseEntity.ok(ApiResponseDto.success("그룹이 성공적으로 삭제되었습니다.", null));
     }
 
+    /**
+     * 그룹에 참여합니다.
+     * 
+     * @param groupId     그룹 ID
+     * @param userDetails 인증된 사용자 정보
+     * @return 참여 결과
+     */
     @PostMapping("/{groupId}/join")
     @JoinGroup
     public ResponseEntity<ApiResponseDto<Void>> joinGroup(
@@ -134,6 +194,13 @@ public class GroupController {
         return ResponseEntity.ok(ApiResponseDto.success("그룹에 성공적으로 참여했습니다.", null));
     }
 
+    /**
+     * 그룹에서 탈퇴합니다.
+     * 
+     * @param groupId     그룹 ID
+     * @param userDetails 인증된 사용자 정보
+     * @return 탈퇴 결과
+     */
     @DeleteMapping("/{groupId}/leave")
     @LeaveGroup
     public ResponseEntity<ApiResponseDto<Void>> leaveGroup(
@@ -144,6 +211,14 @@ public class GroupController {
         return ResponseEntity.ok(ApiResponseDto.success("그룹에서 성공적으로 탈퇴했습니다.", null));
     }
 
+    /**
+     * 그룹의 새로운 목표를 생성합니다.
+     * 
+     * @param groupId     그룹 ID
+     * @param request     목표 생성 요청 정보
+     * @param userDetails 인증된 사용자 정보
+     * @return 생성된 목표 정보
+     */
     @PostMapping("/{groupId}/goals")
     @CreateGoal
     public ResponseEntity<ApiResponseDto<GoalResponseDto>> createGoal(
@@ -156,6 +231,12 @@ public class GroupController {
                 .body(ApiResponseDto.success("목표가 성공적으로 생성되었습니다.", goal));
     }
 
+    /**
+     * 그룹의 목표 목록을 조회합니다.
+     * 
+     * @param groupId 그룹 ID
+     * @return 목표 목록
+     */
     @GetMapping("/{groupId}/goals")
     @GetGoals
     public ResponseEntity<ApiResponseDto<List<GoalResponseDto>>> getGoals(@PathVariable Long groupId) {
@@ -163,6 +244,15 @@ public class GroupController {
         return ResponseEntity.ok(ApiResponseDto.success(goals));
     }
 
+    /**
+     * 그룹의 목표를 수정합니다.
+     * 
+     * @param groupId     그룹 ID
+     * @param goalId      목표 ID
+     * @param request     목표 수정 요청 정보
+     * @param userDetails 인증된 사용자 정보
+     * @return 수정된 목표 정보
+     */
     @PutMapping("/{groupId}/goals/{goalId}")
     @UpdateGoal
     public ResponseEntity<ApiResponseDto<GoalResponseDto>> updateGoal(
@@ -175,6 +265,14 @@ public class GroupController {
         return ResponseEntity.ok(ApiResponseDto.success("목표가 성공적으로 수정되었습니다.", goal));
     }
 
+    /**
+     * 그룹의 목표를 삭제합니다.
+     * 
+     * @param groupId     그룹 ID
+     * @param goalId      목표 ID
+     * @param userDetails 인증된 사용자 정보
+     * @return 삭제 결과
+     */
     @DeleteMapping("/{groupId}/goals/{goalId}")
     @DeleteGoal
     public ResponseEntity<ApiResponseDto<Void>> deleteGoal(
