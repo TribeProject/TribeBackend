@@ -5,11 +5,10 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.unity.tribe.domain.group.entity.Group;
-import com.unity.tribe.domain.group.entity.Member;
+import com.unity.tribe.domain.member.entity.MemberEntity;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
-    List<Member> findAllByGroup(Group group);
+public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
+    List<MemberEntity> findAllByGroupId(String groupId);
 
-    Optional<Member> findByGroupAndUserId(Group group, String userId);
+    Optional<MemberEntity> findByGroupIdAndUserId(String groupId, String userId);
 }

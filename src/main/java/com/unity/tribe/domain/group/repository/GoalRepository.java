@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.unity.tribe.domain.group.entity.Goal;
-import com.unity.tribe.domain.group.entity.Group;
+import com.unity.tribe.domain.group.entity.GoalEntity;
 
-public interface GoalRepository extends JpaRepository<Goal, Long> {
-    List<Goal> findAllByGroup(Group group);
+public interface GoalRepository extends JpaRepository<GoalEntity, Long> {
+    List<GoalEntity> findAllByGroupId(String groupId);
 }
