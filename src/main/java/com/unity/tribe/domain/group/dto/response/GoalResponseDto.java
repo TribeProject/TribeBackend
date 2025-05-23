@@ -8,7 +8,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class GoalResponseDto {
-
     private Long id;
     private String title;
     private String description;

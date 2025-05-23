@@ -11,7 +11,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class GroupDetailResponseDto {
-
     private Long id;
     private String name;
     private String description;

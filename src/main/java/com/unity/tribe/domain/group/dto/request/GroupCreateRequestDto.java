@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class GroupCreateRequestDto {
-
     private String name;
     private String description;
     private Long categoryId;
