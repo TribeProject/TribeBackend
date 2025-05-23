@@ -10,6 +10,7 @@ import com.unity.tribe.common.model.CommonPageDto;
 import com.unity.tribe.domain.group.dto.request.GoalCreateRequestDto;
 import com.unity.tribe.domain.group.dto.request.GoalUpdateRequestDto;
 import com.unity.tribe.domain.group.dto.request.GroupCreateRequestDto;
+import com.unity.tribe.domain.group.dto.request.GroupFilterRequestDto;
 import com.unity.tribe.domain.group.dto.request.GroupUpdateRequestDto;
 import com.unity.tribe.domain.group.dto.response.GoalResponseDto;
 import com.unity.tribe.domain.group.dto.response.GroupDetailResponseDto;
@@ -39,7 +40,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public GroupDetailResponseDto getGroup(Long groupId) {
+    public GroupDetailResponseDto getGroup(String groupId) {
         // TODO: 구현 필요
         return null;
     }
@@ -51,46 +52,53 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public GroupDetailResponseDto updateGroup(Long groupId, GroupUpdateRequestDto request, String userId) {
+    public GroupDetailResponseDto updateGroup(String groupId, GroupUpdateRequestDto request, String userId) {
         // TODO: 구현 필요
         return null;
     }
 
     @Override
-    public void deleteGroup(Long groupId, String userId) {
+    public void deleteGroup(String groupId, String userId) {
         // TODO: 구현 필요
     }
 
     @Override
-    public void joinGroup(Long groupId, String userId) {
+    public void joinGroup(String groupId, String userId) {
         // TODO: 구현 필요
     }
 
     @Override
-    public void leaveGroup(Long groupId, String userId) {
+    public void leaveGroup(String groupId, String userId) {
         // TODO: 구현 필요
     }
 
     @Override
-    public GoalResponseDto createGoal(Long groupId, GoalCreateRequestDto request, String userId) {
+    public GoalResponseDto createGoal(String groupId, GoalCreateRequestDto request, String userId) {
         // TODO: 구현 필요
         return null;
     }
 
     @Override
-    public List<GoalResponseDto> getGoals(Long groupId) {
+    public List<GoalResponseDto> getGoals(String groupId) {
         // TODO: 구현 필요
         return null;
     }
 
     @Override
-    public GoalResponseDto updateGoal(Long groupId, Long goalId, GoalUpdateRequestDto request, String userId) {
+    public GoalResponseDto updateGoal(String groupId, Long goalId, GoalUpdateRequestDto request, String userId) {
         // TODO: 구현 필요
         return null;
     }
 
     @Override
-    public void deleteGoal(Long groupId, Long goalId, String userId) {
+    public void deleteGoal(String groupId, Long goalId, String userId) {
         // TODO: 구현 필요
+    }
+
+    @Override
+    public CommonPageDto<List<GroupListResponseDto>> getGroupsWithFilter(Pageable pageable,
+            GroupFilterRequestDto filter) {
+        // TODO: 구현 필요
+        return null;
     }
 }
