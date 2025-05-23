@@ -3,7 +3,7 @@ package com.unity.tribe.domain.group.dto.response;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.unity.tribe.domain.member.dto.MemberResponseDto;
+import com.unity.tribe.domain.member.dto.response.MemberResponseDto;
 
 import lombok.Builder;
 import lombok.Getter;
