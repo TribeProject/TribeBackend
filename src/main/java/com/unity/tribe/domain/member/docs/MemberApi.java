@@ -1,4 +1,4 @@
-package com.unity.tribe.domain.group.docs;
+package com.unity.tribe.domain.member.docs;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,11 +9,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
- * 모임 컨트롤러 Swagger 문서 태그
+ * 모임 멤버 컨트롤러 Swagger 문서 태그
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Tag(name = "Group")
+@Tag(name = "Member")
 @SecurityRequirement(name = "bearerAuth")
-public @interface GroupApi {
+public @interface MemberApi {
 }
