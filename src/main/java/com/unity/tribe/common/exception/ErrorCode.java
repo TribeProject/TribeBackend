@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+    // === 공통 오류 ===
     INTERNAL_SERVER_ERROR("SYS_001", "서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     DATABASE_ERROR("SYS_002", "데이터베이스 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     EXTERNAL_API_ERROR("SYS_003", "외부 API 호출 중 오류가 발생했습니다.", HttpStatus.BAD_GATEWAY),
@@ -37,8 +38,19 @@ public enum ErrorCode {
     FILE_UPLOAD_FAILED("FILE_001", "파일 업로드에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     FILE_NOT_FOUND("FILE_002", "파일을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
+    // === 그룹 ===
+    GROUP_NOT_FOUND("GROUP_001", "존재하지 않는 그룹입니다.", HttpStatus.NOT_FOUND),
+    DUPLICATE_GROUP("GROUP_002", "이미 존재하는 그룹입니다.", HttpStatus.CONFLICT),
+    INVALID_GROUP_STATUS("GROUP_003", "그룹 상태가 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
+
+    // === 멤버 ===
+    MEMBER_NOT_FOUND("MEMBER_001", "존재하지 않는 멤버입니다.", HttpStatus.NOT_FOUND),
+    DUPLICATE_MEMBER("MEMBER_002", "이미 존재하는 멤버입니다.", HttpStatus.CONFLICT),
+    INVALID_MEMBER_STATUS("MEMBER_003", "멤버 상태가 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
+
     // === 기타 ===
     TOO_MANY_REQUESTS("SYS_007", "요청이 너무 많습니다. 잠시 후 다시 시도해주세요.", HttpStatus.TOO_MANY_REQUESTS);
+
     private final String code;
     private final String message;
     private final HttpStatus httpStatus;
