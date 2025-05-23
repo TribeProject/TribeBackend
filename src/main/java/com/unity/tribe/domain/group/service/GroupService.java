@@ -8,130 +8,140 @@ import com.unity.tribe.common.model.CommonPageDto;
 import com.unity.tribe.domain.group.dto.request.GoalCreateRequestDto;
 import com.unity.tribe.domain.group.dto.request.GoalUpdateRequestDto;
 import com.unity.tribe.domain.group.dto.request.GroupCreateRequestDto;
+import com.unity.tribe.domain.group.dto.request.GroupFilterRequestDto;
 import com.unity.tribe.domain.group.dto.request.GroupUpdateRequestDto;
 import com.unity.tribe.domain.group.dto.response.GoalResponseDto;
 import com.unity.tribe.domain.group.dto.response.GroupDetailResponseDto;
 import com.unity.tribe.domain.group.dto.response.GroupListResponseDto;
 
 /**
- * 모임 관련 서비스
+ * 그룹 관련 서비스 인터페이스
  */
 public interface GroupService {
 
     /**
-     * 상태별 모임 목록을 페이지네이션하여 조회
+     * 필터링 조건을 적용한 그룹 목록을 조회합니다.
      * 
      * @param pageable 페이지 정보
-     * @param status   모임 상태
-     * @return 페이지네이션된 모임 목록
+     * @param filter   필터링 조건
+     * @return 그룹 목록 페이지 정보
+     */
+    CommonPageDto<List<GroupListResponseDto>> getGroupsWithFilter(Pageable pageable, GroupFilterRequestDto filter);
+
+    /**
+     * 그룹 목록을 조회합니다. (기존 호환성 유지)
+     * 
+     * @param pageable 페이지 정보
+     * @param status   그룹 상태
+     * @return 그룹 목록 페이지 정보
      */
     CommonPageDto<List<GroupListResponseDto>> getGroups(Pageable pageable, String status);
 
     /**
-     * 카테고리별 모임 목록을 페이지네이션하여 조회
+     * 카테고리별 그룹 목록을 조회합니다. (기존 호환성 유지)
      * 
      * @param categoryId 카테고리 ID
      * @param pageable   페이지 정보
-     * @param status     모임 상태
-     * @return 페이지네이션된 모임 목록
+     * @param status     그룹 상태
+     * @return 그룹 목록 페이지 정보
      */
     CommonPageDto<List<GroupListResponseDto>> getGroupsByCategory(Long categoryId, Pageable pageable, String status);
 
     /**
-     * 키워드로 모임 검색
+     * 키워드로 그룹을 검색합니다. (기존 호환성 유지)
      * 
      * @param keyword  검색 키워드
      * @param pageable 페이지 정보
-     * @return 검색된 모임 목록
+     * @return 검색된 그룹 목록 페이지 정보
      */
     CommonPageDto<List<GroupListResponseDto>> searchGroups(String keyword, Pageable pageable);
 
     /**
-     * 특정 모임 상세 정보 조회
+     * 그룹 상세 정보를 조회합니다.
      * 
-     * @param groupId 모임 ID
-     * @return 모임 상세 정보
+     * @param groupId 그룹 ID
+     * @return 그룹 상세 정보
      */
-    GroupDetailResponseDto getGroup(Long groupId);
+    GroupDetailResponseDto getGroup(String groupId);
 
     /**
-     * 새로운 모임 생성
+     * 새로운 그룹을 생성합니다.
      * 
-     * @param request 모임 생성 요청 정보
-     * @param userId  생성자 ID
-     * @return 생성된 모임 정보
+     * @param request  그룹 생성 요청 정보
+     * @param username 사용자 이름
+     * @return 생성된 그룹 상세 정보
      */
-    GroupDetailResponseDto createGroup(GroupCreateRequestDto request, String userId);
+    GroupDetailResponseDto createGroup(GroupCreateRequestDto request, String username);
 
     /**
-     * 모임 정보 수정
+     * 그룹 정보를 수정합니다.
      * 
-     * @param groupId 모임 ID
-     * @param request 수정 요청 정보
-     * @param userId  수정자 ID
-     * @return 수정된 모임 정보
+     * @param groupId  그룹 ID
+     * @param request  그룹 수정 요청 정보
+     * @param username 사용자 이름
+     * @return 수정된 그룹 상세 정보
      */
-    GroupDetailResponseDto updateGroup(Long groupId, GroupUpdateRequestDto request, String userId);
+    GroupDetailResponseDto updateGroup(String groupId, GroupUpdateRequestDto request, String username);
 
     /**
-     * 모임 삭제
+     * 그룹을 삭제합니다.
      * 
-     * @param groupId 모임 ID
-     * @param userId  삭제 요청자 ID
+     * @param groupId  그룹 ID
+     * @param username 사용자 이름
      */
-    void deleteGroup(Long groupId, String userId);
+    void deleteGroup(String groupId, String username);
 
     /**
-     * 모임 가입
+     * 그룹에 참여합니다.
      * 
-     * @param groupId 모임 ID
-     * @param userId  가입 요청자 ID
+     * @param groupId  그룹 ID
+     * @param username 사용자 이름
      */
-    void joinGroup(Long groupId, String userId);
+    void joinGroup(String groupId, String username);
 
     /**
-     * 모임 탈퇴
+     * 그룹에서 탈퇴합니다.
      * 
-     * @param groupId 모임 ID
-     * @param userId  탈퇴 요청자 ID
+     * @param groupId  그룹 ID
+     * @param username 사용자 이름
      */
-    void leaveGroup(Long groupId, String userId);
+    void leaveGroup(String groupId, String username);
 
     /**
-     * 모임 목표 생성
+     * 그룹의 목표를 생성합니다.
      * 
-     * @param groupId 모임 ID
-     * @param request 목표 생성 요청 정보
-     * @param userId  생성자 ID
+     * @param groupId  그룹 ID
+     * @param request  목표 생성 요청 정보
+     * @param username 사용자 이름
      * @return 생성된 목표 정보
      */
-    GoalResponseDto createGoal(Long groupId, GoalCreateRequestDto request, String userId);
+    GoalResponseDto createGoal(String groupId, GoalCreateRequestDto request, String username);
 
     /**
-     * 모임의 목표 목록 조회
+     * 그룹의 목표 목록을 조회합니다.
      * 
-     * @param groupId 모임 ID
+     * @param groupId 그룹 ID
      * @return 목표 목록
      */
-    List<GoalResponseDto> getGoals(Long groupId);
+    List<GoalResponseDto> getGoals(String groupId);
 
     /**
-     * 모임 목표 수정
+     * 그룹의 목표를 수정합니다.
      * 
-     * @param groupId 모임 ID
-     * @param goalId  목표 ID
-     * @param request 수정 요청 정보
-     * @param userId  수정자 ID
+     * @param groupId  그룹 ID
+     * @param goalId   목표 ID
+     * @param request  목표 수정 요청 정보
+     * @param username 사용자 이름
      * @return 수정된 목표 정보
      */
-    GoalResponseDto updateGoal(Long groupId, Long goalId, GoalUpdateRequestDto request, String userId);
+    GoalResponseDto updateGoal(String groupId, Long goalId, GoalUpdateRequestDto request, String username);
 
     /**
-     * 모임 목표 삭제
+     * 그룹의 목표를 삭제합니다.
      * 
-     * @param groupId 모임 ID
-     * @param goalId  목표 ID
-     * @param userId  삭제 요청자 ID
+     * @param groupId  그룹 ID
+     * @param goalId   목표 ID
+     * @param username 사용자 이름
      */
-    void deleteGoal(Long groupId, Long goalId, String userId);
+    void deleteGoal(String groupId, Long goalId, String username);
 }
