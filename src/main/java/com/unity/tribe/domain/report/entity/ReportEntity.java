@@ -3,11 +3,35 @@ package com.unity.tribe.domain.report.entity;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "report", schema = "tribe", catalog = "")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReportEntity {
+    public enum ReportReasonType {
+        PURE, VIOLENCE, COMMENT
+    }
+
+    public enum ReportTargetType {
+        FEED, COMMENT
+    }
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "report_id")
@@ -111,18 +135,23 @@ public class ReportEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { 
-            return true; 
+        if (this == o) {
+            return true;
         }
         if (o == null || getClass() != o.getClass()) {
-            return false; 
+            return false;
         }
         ReportEntity that = (ReportEntity) o;
-        return reportId == that.reportId && Objects.equals(userId, that.userId) && Objects.equals(reportType, that.reportType) && Objects.equals(targetFeedId, that.targetFeedId) && Objects.equals(targetUserId, that.targetUserId) && Objects.equals(targetCommentId, that.targetCommentId) && Objects.equals(type, that.type) && Objects.equals(status, that.status) && Objects.equals(createdAt, that.createdAt);
+        return reportId == that.reportId && Objects.equals(userId, that.userId)
+                && Objects.equals(reportType, that.reportType) && Objects.equals(targetFeedId, that.targetFeedId)
+                && Objects.equals(targetUserId, that.targetUserId)
+                && Objects.equals(targetCommentId, that.targetCommentId) && Objects.equals(type, that.type)
+                && Objects.equals(status, that.status) && Objects.equals(createdAt, that.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reportId, userId, reportType, targetFeedId, targetUserId, targetCommentId, type, status, createdAt);
+        return Objects.hash(reportId, userId, reportType, targetFeedId, targetUserId, targetCommentId, type, status,
+                createdAt);
     }
 }

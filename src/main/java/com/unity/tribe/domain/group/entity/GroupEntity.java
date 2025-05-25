@@ -32,6 +32,14 @@ public class GroupEntity {
         WAITING, ONGOING, FINISHED, DISBANDED
     }
 
+    public enum GroupType {
+        MISSION, CONTINUOUS
+    }
+
+    public enum GenderRestriction {
+        NONE, MALE, FEMALE
+    }
+
     @Id
     @Column(name = "group_id")
     private String groupId;

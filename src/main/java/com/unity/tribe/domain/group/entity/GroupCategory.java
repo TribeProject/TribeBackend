@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.unity.tribe.common.model.BaseEntity;
-import com.unity.tribe.common.model.enums.GroupCategoryCode;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +22,33 @@ import lombok.Getter;
 @Table(name = "group_categories")
 @Getter
 public class GroupCategory extends BaseEntity {
+
+    public enum GroupCategoryCode {
+        FOOD("F", "FOOD"),
+        TRIP("T", "TRIP"),
+        EXERCISE_AND_ACTIVITY("EA", "EXERCISE_AND_ACTIVITY"),
+        CULTURE_AND_ART("CA", "CULTURE_AND_ART"),
+        SELF_DEVELOPMENT("SD", "SELF_DEVELOPMENT"),
+        GAME("G", "GAME"),
+        BEAUTY_AND_FASHION("BF", "BEAUTY_AND_FASHION"),
+        VOLUNTEER("V", "VOLUNTEER");
+
+        private final String code;
+        private final String description;
+
+        GroupCategoryCode(String code, String description) {
+            this.code = code;
+            this.description = description;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+    }
 
     protected GroupCategory() {
     }
