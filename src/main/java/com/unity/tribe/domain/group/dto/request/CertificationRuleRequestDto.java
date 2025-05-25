@@ -1,5 +1,6 @@
 package com.unity.tribe.domain.group.dto.request;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -19,5 +20,6 @@ public class CertificationRuleRequestDto {
     private Integer weeklyCount;
     private List<String> weeklyDays;
     private List<String> monthlyDays;
+    private LocalDate goalDate;
     private String content;
 }
