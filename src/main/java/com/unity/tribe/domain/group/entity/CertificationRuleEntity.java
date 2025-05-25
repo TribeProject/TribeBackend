@@ -1,9 +1,15 @@
-package com.unity.tribe.domain.certification.entity;
+package com.unity.tribe.domain.group.entity;
 
 import java.sql.Timestamp;
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "certification_rule", schema = "tribe", catalog = "")
@@ -144,18 +150,25 @@ public class CertificationRuleEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { 
-            return true; 
+        if (this == o) {
+            return true;
         }
         if (o == null || getClass() != o.getClass()) {
-            return false; 
+            return false;
         }
         CertificationRuleEntity that = (CertificationRuleEntity) o;
-        return certificationRuleId == that.certificationRuleId && imageRequired == that.imageRequired && textRequired == that.textRequired && Objects.equals(groupId, that.groupId) && Objects.equals(content, that.content) && Objects.equals(goalDate, that.goalDate) && Objects.equals(certificationFrequency, that.certificationFrequency) && Objects.equals(weeklyCount, that.weeklyCount) && Objects.equals(weeklyDays, that.weeklyDays) && Objects.equals(monthlyDays, that.monthlyDays) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        return certificationRuleId == that.certificationRuleId && imageRequired == that.imageRequired
+                && textRequired == that.textRequired && Objects.equals(groupId, that.groupId)
+                && Objects.equals(content, that.content) && Objects.equals(goalDate, that.goalDate)
+                && Objects.equals(certificationFrequency, that.certificationFrequency)
+                && Objects.equals(weeklyCount, that.weeklyCount) && Objects.equals(weeklyDays, that.weeklyDays)
+                && Objects.equals(monthlyDays, that.monthlyDays) && Objects.equals(createdAt, that.createdAt)
+                && Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(certificationRuleId, groupId, content, goalDate, imageRequired, textRequired, certificationFrequency, weeklyCount, weeklyDays, monthlyDays, createdAt, updatedAt);
+        return Objects.hash(certificationRuleId, groupId, content, goalDate, imageRequired, textRequired,
+                certificationFrequency, weeklyCount, weeklyDays, monthlyDays, createdAt, updatedAt);
     }
 }
