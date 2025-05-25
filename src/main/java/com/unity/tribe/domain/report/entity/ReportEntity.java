@@ -12,14 +12,26 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "report", schema = "tribe", catalog = "")
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportEntity {
+    public enum ReportReasonType {
+        PURE, VIOLENCE, COMMENT
+    }
+
+    public enum ReportTargetType {
+        FEED, COMMENT
+    }
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "report_id")
