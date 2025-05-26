@@ -3,7 +3,6 @@ pipeline {
     
     tools {
         jdk 'JDK-17'
-        gradle 'Gradle-8.0'
     }
     
     environment {
