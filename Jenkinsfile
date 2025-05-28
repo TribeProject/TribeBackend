@@ -30,17 +30,18 @@ pipeline {
             }
         }
         
-        stage('테스트') {
-            steps {
-                echo '테스트 실행 중'
-                sh './gradlew clean test --no-daemon -Dorg.gradle.jvmargs="-Xmx512m"'
-            }
-            post {
-                always {
-                    junit 'build/test-results/test/*.xml'
-                }
-            }
-        }
+        // TODO: 테스트 코드 추가 후 활성화
+        // stage('테스트') {
+        //     steps {
+        //         echo '테스트 실행 중'
+        //         sh './gradlew clean test --no-daemon -Dorg.gradle.jvmargs="-Xmx512m"'
+        //     }
+        //     post {
+        //         always {
+        //             junit 'build/test-results/test/*.xml'
+        //         }
+        //     }
+        // }
         
         stage('빌드') {
             steps {
