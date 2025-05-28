@@ -35,23 +35,20 @@ pipeline {
         stage('설정 파일 배포') {
             steps {
                 echo 'CONFIG FILE DEPLOY'
-                script {
-                    withCredentials([file(credentialsId: 'application-config', variable: 'CONFIG_FILE')]) {
-                        sh '''
-                            # CONFIG FILE DIRECTORY CREATION
-                            mkdir -p src/main/resources
-                            
-                            # COPY CONFIG FILE FROM JENKINS SECRET FILE
-                            cp ${CONFIG_FILE} src/main/resources/application.yml
-                            
-                            echo "CONFIG FILE DEPLOYED"
-                            echo "CONFIG FILE EXISTENCE CHECK:"
-                            ls -la src/main/resources/application.yml
-                            
-                            echo "CONFIG FILE BASIC INFORMATION CHECK:"
-                            grep -E "(application:|name:|port:|context-path:)" src/main/resources/application.yml | head -5 || true
-                        '''
-                    }
+                withCredentials([file(credentialsId: 'application-config', variable: 'CONFIG_FILE')]) {
+                    sh '''
+                        echo "CONFIG_FILE PATH: ${CONFIG_FILE}"
+                        ls -l ${CONFIG_FILE}
+                        mkdir -p src/main/resources
+                        cp ${CONFIG_FILE} src/main/resources/application.yml
+
+                        echo "CONFIG FILE DEPLOYED"
+                        echo "CONFIG FILE EXISTENCE CHECK:"
+                        ls -la src/main/resources/application.yml
+
+                        echo "CONFIG FILE BASIC INFORMATION CHECK:"
+                        grep -E "(application:|name:|port:|context-path:)" src/main/resources/application.yml | head -5 || true
+                    '''
                 }
             }
         }
@@ -309,6 +306,9 @@ Swagger UI: http://${PUBLIC_IP}:${APP_PORT}/api/swagger-ui.html
                             curl -v http://localhost:${APP_PORT} || echo "LOCAL CONNECTION FAILED"
                             
                             echo "=== DISK USAGE ==="
+                            df -h ${DEPLOY_PATH}
+
+                            echo "=== MEMORY USAGE ==="
                             free -h
                             
                             echo "=========================================================="
