@@ -11,7 +11,7 @@ pipeline {
         APP_NAME = 'tribe-backend'
         APP_PORT = '9999'
         DEPLOY_PATH = '/home/ec2-user/deploy'
-        PUBLIC_IP = '15.165.161.2'
+        PUBLIC_IP = '13.125.23.179'
         JAR_NAME = 'tribe-0.0.1-SNAPSHOT.jar'
         GRADLE_OPTS = '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx384m -XX:MaxMetaspaceSize=128m"'
         JAVA_OPTS = '-Xms128m -Xmx256m -XX:+UseG1GC -Dserver.port=9999'
