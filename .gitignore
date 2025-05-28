@@ -43,10 +43,12 @@ Thumbs.db
 ### VS Code ###
 .vscode/
 
-src/main/resources/application.yml
+src/main/resources/application*.yml
 
 *.swp
 *.swo
 
 ./gradlew.bat
 /gradle/wrapper
+
+.env*
