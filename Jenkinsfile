@@ -13,7 +13,8 @@ pipeline {
         DEPLOY_PATH = '/home/ec2-user/deploy'
         PUBLIC_IP = '15.165.161.2'
         JAR_NAME = 'tribe-0.0.1-SNAPSHOT.jar'
-        JAVA_OPTS = '-Xms256m -Xmx512m -XX:+UseG1GC -Dserver.port=9999'
+        GRADLE_OPTS = '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx384m -XX:MaxMetaspaceSize=128m"'
+        JAVA_OPTS = '-Xms128m -Xmx256m -XX:+UseG1GC -Dserver.port=9999'
     }
     
     stages {
@@ -81,11 +82,20 @@ pipeline {
             steps {
                 echo '=== JAR 파일 빌드 ==='
                 sh '''
+                    # t3.micro 최적화 빌드
+                    echo "=== t3.micro 최적화된 빌드 시작 ==="
+                    
+                    # 메모리 상태 확인
+                    echo "빌드 전 메모리 상태:"
+                    free -h
+                    
                     # Gradle 캐시 정리
                     ./gradlew clean
                     
-                    # 빌드 실행
-                    ./gradlew build -x test --no-daemon --refresh-dependencies
+                    # 메모리 제한된 빌드 실행
+                    ./gradlew build -x test --no-daemon --refresh-dependencies \
+                        -Dorg.gradle.jvmargs="-Xmx384m -XX:MaxMetaspaceSize=128m" \
+                        --max-workers=1
                     
                     echo "=== 빌드된 JAR 파일 확인 ==="
                     ls -la build/libs/
@@ -98,6 +108,9 @@ pipeline {
                     # JAR 파일 크기 확인
                     echo "JAR 파일 크기:"
                     du -h "build/libs/${JAR_NAME}"
+                    
+                    echo "빌드 후 메모리 상태:"
+                    free -h
                 '''
             }
             post {
@@ -122,12 +135,13 @@ pipeline {
                     chmod 755 ${DEPLOY_PATH}/logs
                     
                     # PM2 설치 확인
-                    if ! command -v pm2 &> /dev/null; then
+                    if command -v pm2 &> /dev/null; then
+                        echo "✓ PM2가 설치되어 있습니다."
+                        echo "PM2 버전: $(pm2 --version)"
+                    else
                         echo "ERROR: PM2가 설치되어 있지 않습니다."
                         echo "PM2 설치: npm install -g pm2"
                         exit 1
-                    else
-                        echo "PM2 버전: $(pm2 --version)"
                     fi
                     
                     echo "배포 디렉토리 준비 완료"
@@ -238,7 +252,7 @@ module.exports = {
     instances: 1,
     autorestart: true,
     watch: false,
-    max_memory_restart: '512M',
+    max_memory_restart: '384M',  // t3.micro 최적화
     restart_delay: 4000,
     env: {
       NODE_ENV: 'production',
@@ -249,7 +263,7 @@ module.exports = {
       DB_NAME: process.env.DB_NAME,
       DB_USERNAME: process.env.DB_USERNAME,
       DB_PASSWORD: process.env.DB_PASSWORD,
-      JAVA_OPTS: '-Xms256m -Xmx512m -XX:+UseG1GC -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Seoul'
+      JAVA_OPTS: '-Xms128m -Xmx256m -XX:+UseG1GC -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Seoul'
     },
     log_file: './logs/combined.log',
     out_file: './logs/out.log',
@@ -361,7 +375,7 @@ CONFIG_EOF
                         if (healthCheck == 0) {
                             success = true
                             echo """
-=== 🎉 배포 성공 🎉 ===
+=== ✅ 배포 성공 ===
 API 주소: http://${PUBLIC_IP}:${APP_PORT}/api
 헬스 체크: http://${PUBLIC_IP}:${APP_PORT}/api/actuator/health
 Swagger UI: http://${PUBLIC_IP}:${APP_PORT}/api/swagger-ui.html
@@ -455,44 +469,6 @@ API 문서: http://${PUBLIC_IP}:${APP_PORT}/api/api-docs
 
 ================================================
             """
-            script {
-                try {
-                    def emailBody = """
-${APP_NAME} 애플리케이션이 성공적으로 배포되었습니다.
-
-배포 정보:
-  • 애플리케이션: ${APP_NAME}
-  • 포트: ${APP_PORT}
-  • 프로파일: production (MariaDB)
-  • 컨텍스트 패스: /api
-  • 배포 시간: ${new Date()}
-  • 빌드 번호: ${env.BUILD_NUMBER}
-
-접속 URL:
-  • 메인 API: http://${PUBLIC_IP}:${APP_PORT}/api
-  • 헬스 체크: http://${PUBLIC_IP}:${APP_PORT}/api/actuator/health
-  • API 문서: http://${PUBLIC_IP}:${APP_PORT}/api/swagger-ui.html
-  • API 스펙: http://${PUBLIC_IP}:${APP_PORT}/api/api-docs
-
-관리 명령어:
-  • 로그 확인: pm2 logs tribe-backend
-  • 재시작: pm2 restart tribe-backend
-  • 중지: pm2 stop tribe-backend
-  • 상태 확인: pm2 status
-
-Jenkins 빌드: ${env.BUILD_URL}
-"""
-                    
-                    mail to: 'jaeuu.dev@gmail.com, gktjdfhr22@gmail.com',
-                         subject: "✅ [Jenkins] ${APP_NAME} 배포 성공 - Build #${env.BUILD_NUMBER}",
-                         body: emailBody,
-                         mimeType: 'text/plain'
-                         
-                    echo "배포 성공 이메일이 발송되었습니다."
-                } catch (Exception e) {
-                    echo "이메일 발송 실패: ${e.message}"
-                }
-            }
         }
         failure {
             echo """
@@ -501,38 +477,6 @@ Jenkins 빌드: ${env.BUILD_URL}
 빌드 번호: ${env.BUILD_NUMBER}
 빌드 URL: ${env.BUILD_URL}
             """
-            script {
-                try {
-                    def failureBody = """
-${APP_NAME} 애플리케이션 배포가 실패했습니다.
-
-실패 정보:
-  • 애플리케이션: ${APP_NAME}
-  • 빌드 번호: ${env.BUILD_NUMBER}
-  • 실패 시간: ${new Date()}
-  • 실패 단계: ${env.STAGE_NAME ?: '알 수 없음'}
-
-조치 사항:
-  1. Jenkins 콘솔 로그를 확인해주세요: ${env.BUILD_URL}console
-  2. 서버에 접속하여 PM2 로그를 확인해주세요: pm2 logs tribe-backend
-  3. 애플리케이션 설정을 점검해주세요
-  4. 데이터베이스 연결 상태를 확인해주세요
-
-빌드 URL: ${env.BUILD_URL}
-
-Jenkins 자동 알림
-"""
-                    
-                    mail to: 'jaeuu.dev@gmail.com, gktjdfhr22@gmail.com',
-                         subject: "❌ [Jenkins] ${APP_NAME} 배포 실패 - Build #${env.BUILD_NUMBER}",
-                         body: failureBody,
-                         mimeType: 'text/plain'
-                         
-                    echo "배포 실패 이메일이 발송되었습니다."
-                } catch (Exception e) {
-                    echo "실패 이메일 발송 실패: ${e.message}"
-                }
-            }
         }
     }
 }
