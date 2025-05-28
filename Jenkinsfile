@@ -303,9 +303,9 @@ CONFIG_EOF
                 echo '=== 배포 상태 확인 ==='
                 script {
                     echo "애플리케이션 초기화 대기 중..."
-                    sh "sleep 20"
+                    sh "sleep 10"
                     
-                    def maxAttempts = 15
+                    def maxAttempts = 8
                     def attempt = 0
                     def success = false
                     
@@ -321,17 +321,12 @@ CONFIG_EOF
                                     exit 1
                                 fi
                                 
-                                # PM2 상태 확인 (jq 없이)
-                                PM2_STATUS=\$(pm2 status tribe-backend --no-color | grep 'tribe-backend' | awk '{print \$10}' || echo "unknown")
-                                echo "PM2 상태: \$PM2_STATUS"
-                                
-                                if echo "\$PM2_STATUS" | grep -q "online"; then
+                                # PM2 상태 확인
+                                if pm2 status tribe-backend | grep -q 'online'; then
                                     echo "✓ PM2 프로세스가 정상 실행 중입니다"
                                 else
-                                    echo "⚠ PM2 프로세스 상태: \$PM2_STATUS"
-                                    # 로그 확인
-                                    echo "=== 최근 에러 로그 확인 ==="
-                                    pm2 logs tribe-backend --lines 10 --raw || true
+                                    echo "⚠ PM2 프로세스 상태 확인 실패"
+                                    pm2 status tribe-backend || true
                                     exit 1
                                 fi
                                 
@@ -347,13 +342,13 @@ CONFIG_EOF
                                 echo "HTTP 헬스 체크 진행 중..."
                                 
                                 # Spring Boot Actuator 헬스 체크
-                                if curl -f -s -m 15 "http://localhost:${APP_PORT}/api/actuator/health" | grep -q '"status":"UP"'; then
+                                if curl -f -s -m 8 "http://localhost:${APP_PORT}/api/actuator/health" | grep -q '"status":"UP"'; then
                                     echo "SUCCESS: Actuator 헬스 체크 통과"
                                     exit 0
                                 fi
                                 
                                 # 기본 API 엔드포인트 확인
-                                HTTP_CODE=\$(curl -s -o /dev/null -w "%{http_code}" -m 15 "http://localhost:${APP_PORT}/api")
+                                HTTP_CODE=\$(curl -s -o /dev/null -w "%{http_code}" -m 8 "http://localhost:${APP_PORT}/api")
                                 echo "API 엔드포인트 응답 코드: \$HTTP_CODE"
                                 if [ "\$HTTP_CODE" = "200" ] || [ "\$HTTP_CODE" = "404" ]; then
                                     echo "SUCCESS: API 엔드포인트 응답 확인 (HTTP \$HTTP_CODE)"
@@ -361,7 +356,7 @@ CONFIG_EOF
                                 fi
                                 
                                 # 기본 포트 응답 확인
-                                if curl -f -s -m 10 "http://localhost:${APP_PORT}" > /dev/null; then
+                                if curl -f -s -m 5 "http://localhost:${APP_PORT}" > /dev/null; then
                                     echo "SUCCESS: 기본 포트 응답 확인"
                                     exit 0
                                 fi
@@ -375,16 +370,26 @@ CONFIG_EOF
                         if (healthCheck == 0) {
                             success = true
                             echo """
-=== ✅ 배포 성공 ===
-API 주소: http://${PUBLIC_IP}:${APP_PORT}/api
-헬스 체크: http://${PUBLIC_IP}:${APP_PORT}/api/actuator/health
-Swagger UI: http://${PUBLIC_IP}:${APP_PORT}/api/swagger-ui.html
-API 문서: http://${PUBLIC_IP}:${APP_PORT}/api/api-docs
+=== 배포 성공 ===
+
+• 애플리케이션 정보:
+   • 이름: ${APP_NAME}
+   • 포트: ${APP_PORT}
+   • 프로파일: production (MariaDB)
+   • 컨텍스트 패스: /api
+   • 배포 시간: ${new Date()}
+
+• 접속 URL:
+   • 메인 API: http://${PUBLIC_IP}:${APP_PORT}/api
+   • 헬스 체크: http://${PUBLIC_IP}:${APP_PORT}/api/actuator/health
+   • Swagger UI: http://${PUBLIC_IP}:${APP_PORT}/api/swagger-ui.html
+   • API 문서: http://${PUBLIC_IP}:${APP_PORT}/api/api-docs
+
                             """
                         } else {
                             if (attempt < maxAttempts) {
                                 echo "재시도 대기 중 (${attempt}/${maxAttempts})..."
-                                sh "sleep 10"
+                                sh "sleep 5"  // 10초에서 5초로 단축
                             }
                         }
                     }
@@ -392,46 +397,35 @@ API 문서: http://${PUBLIC_IP}:${APP_PORT}/api/api-docs
                     if (!success) {
                         echo "ERROR: 헬스 체크 실패, 상세 진단 실행 중"
                         sh '''
-                            echo "==================== 배포 실패 진단 ===================="
+                            echo ""
+                            echo "• 배포 실패 진단"
+                            echo ""
                             
-                            echo "=== PM2 프로세스 상태 ==="
-                            pm2 describe tribe-backend || echo "PM2 프로세스를 찾을 수 없습니다"
+                            echo "• PM2 프로세스 상태:"
+                            echo "─────────────────────────"
+                            pm2 describe tribe-backend || echo "   ⚠ PM2 프로세스를 찾을 수 없습니다"
                             pm2 status
+                            echo ""
                             
-                            echo "=== PM2 로그 (최근 30줄) ==="
-                            pm2 logs tribe-backend --lines 30 --raw || echo "로그를 가져올 수 없습니다"
-                            
-                            echo "=== 직접 로그 파일 확인 ==="
+                            echo "• 애플리케이션 로그 (최근 20줄):"
+                            echo "─────────────────────────────────"
                             if [ -f ${DEPLOY_PATH}/logs/out.log ]; then
-                                echo "--- stdout 로그 (최근 20줄) ---"
                                 tail -20 ${DEPLOY_PATH}/logs/out.log
+                            else
+                                timeout 3 pm2 logs tribe-backend --lines 20 --raw --no-stream 2>/dev/null || echo "⚠ 로그를 가져올 수 없습니다"
                             fi
+                            echo ""
                             
-                            if [ -f ${DEPLOY_PATH}/logs/err.log ]; then
-                                echo "--- stderr 로그 (최근 20줄) ---"
-                                tail -20 ${DEPLOY_PATH}/logs/err.log
-                            fi
+                            echo "• 포트 사용 상태:"
+                            echo "─────────────────"
+                            ss -tlnp | grep ${APP_PORT} || echo "⚠ 포트 ${APP_PORT}가 사용되지 않고 있습니다"
+                            echo ""
                             
-                            echo "=== 포트 사용 상태 ==="
-                            ss -tlnp | grep ${APP_PORT} || echo "포트 ${APP_PORT}가 사용되지 않고 있습니다"
+                            echo "• Java 프로세스:"
+                            echo "─────────────────"
+                            ps aux | grep java | grep -v grep || echo "⚠ Java 프로세스가 실행되지 않고 있습니다"
+                            echo ""
                             
-                            echo "=== Java 프로세스 ==="
-                            ps aux | grep java | grep -v grep || echo "Java 프로세스가 실행되지 않고 있습니다"
-                            
-                            echo "=== 시스템 리소스 ==="
-                            echo "메모리:"
-                            free -h
-                            echo "디스크:"
-                            df -h ${DEPLOY_PATH}
-                            echo "CPU:"
-                            uptime
-                            
-                            echo "=== 수동 JAR 실행 테스트 ==="
-                            cd ${DEPLOY_PATH}
-                            echo "JAR 파일 실행 가능 여부 확인:"
-                            timeout 10 java -jar app.jar --help || echo "JAR 파일 실행 실패"
-                            
-                            echo "=========================================================="
                         '''
                         error "배포 실패 - 애플리케이션이 정상적으로 시작되지 않았습니다"
                     }
@@ -446,36 +440,32 @@ API 문서: http://${PUBLIC_IP}:${APP_PORT}/api/api-docs
         }
         success {
             echo """
-✅ 배포 성공
+✅ 배포 성공                              
 
-배포 정보:
-  애플리케이션: ${APP_NAME}
-  포트: ${APP_PORT}
-  프로파일: production (MariaDB)
-  컨텍스트 패스: /api
-  배포 시간: ${new Date()}
+• 배포 정보:
+   • 애플리케이션: ${APP_NAME}
+   • 포트: ${APP_PORT}
+   • 프로파일: production (MariaDB)
+   • 컨텍스트 패스: /api
+   • 배포 시간: ${new Date()}
 
-접속 URL:
-  메인 API: http://${PUBLIC_IP}:${APP_PORT}/api
-  헬스 체크: http://${PUBLIC_IP}:${APP_PORT}/api/actuator/health
-  API 문서: http://${PUBLIC_IP}:${APP_PORT}/api/swagger-ui.html
-  API 스펙: http://${PUBLIC_IP}:${APP_PORT}/api/api-docs
+• 서비스 URL:
+   • 메인 API      → http://${PUBLIC_IP}:${APP_PORT}/api
+   • 헬스 체크     → http://${PUBLIC_IP}:${APP_PORT}/api/actuator/health
+   • API 문서      → http://${PUBLIC_IP}:${APP_PORT}/api/swagger-ui.html
+   • API 스펙      → http://${PUBLIC_IP}:${APP_PORT}/api/api-docs
 
-관리 명령어:
-  로그 확인: pm2 logs tribe-backend
-  재시작: pm2 restart tribe-backend
-  중지: pm2 stop tribe-backend
-  상태 확인: pm2 status
-
-================================================
+• 배포 완료: 서비스가 정상적으로 실행 중입니다.
             """
         }
         failure {
             echo """
-❌ 배포 실패
+❌ 배포 실패                              
 
-빌드 번호: ${env.BUILD_NUMBER}
-빌드 URL: ${env.BUILD_URL}
+• 실패 정보:
+   • 빌드 번호: ${env.BUILD_NUMBER}
+   • 빌드 URL: ${env.BUILD_URL}
+   • 실패 시간: ${new Date()}
             """
         }
     }
