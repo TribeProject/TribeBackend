@@ -450,7 +450,7 @@ API 문서: http://${PUBLIC_IP}:${APP_PORT}/api/api-docs
             // 이메일 알림 발송
             script {
                 try {
-                    mail to: 'jaeuu.dev@gmail.com',
+                    mail to: 'jaeuu.dev@gmail.com, gktjdfhr22@gmail.com',
                          subject: "[Jenkins] ${APP_NAME} 배포 성공 알림",
                          body: """
 ${APP_NAME} 애플리케이션이 성공적으로 배포되었습니다.
@@ -470,7 +470,7 @@ ${APP_NAME} 애플리케이션이 성공적으로 배포되었습니다.
 
 Jenkins
                          """
-                    echo "이메일 알림이 jaeuu.dev@gmail.com으로 발송되었습니다."
+                    echo "이메일 알림이 발송되었습니다."
                 } catch (Exception e) {
                     echo "이메일 발송 실패: ${e.message}"
                 }
@@ -486,7 +486,7 @@ Jenkins
             // 이메일 알림 발송
             script {
                 try {
-                    mail to: 'jaeuu.dev@gmail.com',
+                    mail to: 'jaeuu.dev@gmail.com, gktjdfhr22@gmail.com',
                          subject: "[Jenkins] ${APP_NAME} 배포 실패 알림",
                          body: """
 ${APP_NAME} 애플리케이션 배포가 실패했습니다.
@@ -501,7 +501,7 @@ ${APP_NAME} 애플리케이션 배포가 실패했습니다.
 
 Jenkins
                          """
-                    echo "실패 이메일 알림이 jaeuu.dev@gmail.com으로 발송되었습니다."
+                    echo "실패 이메일 알림이 발송되었습니다."
                 } catch (Exception e) {
                     echo "실패 이메일 발송 실패: ${e.message}"
                 }
