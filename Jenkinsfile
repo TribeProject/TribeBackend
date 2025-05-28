@@ -239,7 +239,7 @@ pipeline {
                             echo "데이터베이스: MariaDB (${DB_HOST}:3306/${DB_NAME})"
 
                             # PM2 ecosystem 설정 파일 생성
-                            cat > ecosystem.config.js <<'CONFIG_EOF'
+                            cat > ecosystem.config.js <<CONFIG_EOF
 module.exports = {
   apps: [{
     name: 'tribe-backend',
@@ -248,21 +248,21 @@ module.exports = {
       '-jar',
       'app.jar'
     ],
-    cwd: process.env.DEPLOY_PATH || '/home/ec2-user/deploy',
+    cwd: '${DEPLOY_PATH}',
     instances: 1,
     autorestart: true,
     watch: false,
-    max_memory_restart: '384M',  // t3.micro 최적화
+    max_memory_restart: '384M',
     restart_delay: 4000,
     env: {
       NODE_ENV: 'production',
       SPRING_PROFILES_ACTIVE: 'prod',
-      SERVER_PORT: process.env.APP_PORT || '9999',
-      DB_HOST: process.env.DB_HOST,
+      SERVER_PORT: '${APP_PORT}',
+      DB_HOST: '${DB_HOST}',
       DB_PORT: '3306',
-      DB_NAME: process.env.DB_NAME,
-      DB_USERNAME: process.env.DB_USERNAME,
-      DB_PASSWORD: process.env.DB_PASSWORD,
+      DB_NAME: '${DB_NAME}',
+      DB_USERNAME: '${DB_USERNAME}',
+      DB_PASSWORD: '${DB_PASSWORD}',
       JAVA_OPTS: '-Xms128m -Xmx256m -XX:+UseG1GC -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Seoul'
     },
     log_file: './logs/combined.log',
