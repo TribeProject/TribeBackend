@@ -19,6 +19,9 @@ public class ReportEntity {
     @Column(name = "report_type")
     private String reportType;
     @Basic
+    @Column(name = "target_group_id")
+    private String targetGroupId;
+    @Basic
     @Column(name = "target_feed_id")
     private String targetFeedId;
     @Basic
@@ -26,7 +29,10 @@ public class ReportEntity {
     private String targetUserId;
     @Basic
     @Column(name = "target_comment_id")
-    private Integer targetCommentId;
+    private int targetCommentId;
+    @Basic
+    @Column(name = "report_count")
+    private int reportCount;
     @Basic
     @Column(name = "type")
     private String type;
@@ -36,78 +42,6 @@ public class ReportEntity {
     @Basic
     @Column(name = "created_at")
     private Timestamp createdAt;
-
-    public int getReportId() {
-        return reportId;
-    }
-
-    public void setReportId(int reportId) {
-        this.reportId = reportId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getReportType() {
-        return reportType;
-    }
-
-    public void setReportType(String reportType) {
-        this.reportType = reportType;
-    }
-
-    public String getTargetFeedId() {
-        return targetFeedId;
-    }
-
-    public void setTargetFeedId(String targetFeedId) {
-        this.targetFeedId = targetFeedId;
-    }
-
-    public String getTargetUserId() {
-        return targetUserId;
-    }
-
-    public void setTargetUserId(String targetUserId) {
-        this.targetUserId = targetUserId;
-    }
-
-    public Integer getTargetCommentId() {
-        return targetCommentId;
-    }
-
-    public void setTargetCommentId(Integer targetCommentId) {
-        this.targetCommentId = targetCommentId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
 
     @Override
     public boolean equals(Object o) {
