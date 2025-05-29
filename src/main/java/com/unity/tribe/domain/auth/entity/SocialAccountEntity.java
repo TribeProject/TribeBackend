@@ -3,11 +3,7 @@ package com.unity.tribe.domain.auth.entity;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "social_account", schema = "tribe", catalog = "")
