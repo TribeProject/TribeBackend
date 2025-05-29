@@ -45,14 +45,6 @@ public class GoalEntity {
     private Integer targetValue;
 
     @Basic
-    @Column(name = "unit_type_id", nullable = false)
-    private Integer unitTypeId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unit_type_id", insertable = false, updatable = false)
-    private GoalUnitTypeEntity unitType;
-
-    @Basic
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private GoalStatus status;
@@ -88,7 +80,6 @@ public class GoalEntity {
                 && Objects.equals(title, that.title)
                 && Objects.equals(description, that.description)
                 && Objects.equals(targetValue, that.targetValue)
-                && Objects.equals(unitTypeId, that.unitTypeId)
                 && Objects.equals(status, that.status)
                 && Objects.equals(startDate, that.startDate)
                 && Objects.equals(endDate, that.endDate)
@@ -99,7 +90,7 @@ public class GoalEntity {
     @Override
     public int hashCode() {
         return Objects.hash(goalId, groupId, certificationRuleId, title, description,
-                targetValue, unitTypeId, status, startDate, endDate,
+                targetValue, status, startDate, endDate,
                 createdAt, updatedAt);
     }
 }

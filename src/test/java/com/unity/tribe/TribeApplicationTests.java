@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class TribeApplicationTests {
 
     @Test
-    void contextLoads() { }
+    void contextLoads() {
+    }
 
 }

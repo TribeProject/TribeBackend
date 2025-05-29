@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.5'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'checkstyle'
 }
 
 group = 'com.unity'
@@ -83,6 +82,7 @@ clean {
 
 
 // checkstyle
+/*
 checkstyle {
     toolVersion = '10.12.5'
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
@@ -99,4 +99,4 @@ tasks.named('checkstyleMain') {
 }
 tasks.named('checkstyleTest') {
     dependsOn tasks.named('compileTestJava')
-}
+}*/

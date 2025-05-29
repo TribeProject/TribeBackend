@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import com.unity.tribe.common.model.ApiResponseDto;
 import com.unity.tribe.common.model.CommonPageDto;
 import com.unity.tribe.domain.group.docs.*;
-import com.unity.tribe.domain.group.dto.request.*;
-import com.unity.tribe.domain.group.dto.response.GoalResponseDto;
+import com.unity.tribe.domain.group.dto.request.GroupCreateRequestDto;
+import com.unity.tribe.domain.group.dto.request.GroupFilterRequestDto;
+import com.unity.tribe.domain.group.dto.request.GroupUpdateRequestDto;
 import com.unity.tribe.domain.group.dto.response.GroupDetailResponseDto;
 import com.unity.tribe.domain.group.dto.response.GroupListResponseDto;
 import com.unity.tribe.domain.group.service.GroupService;
@@ -352,79 +353,4 @@ public class GroupController {
         return ResponseEntity.ok(ApiResponseDto.success("모임에서 성공적으로 탈퇴했습니다.", null));
     }
 
-    /**
-     * 모임의 새로운 목표를 생성합니다.
-     * 
-     * @param groupId     모임 ULID
-     * @param request     목표 생성 요청 데이터
-     * @param userDetails 인증된 사용자 정보
-     * @return 생성된 목표 정보
-     */
-    @PostMapping("/{groupId}/goals")
-    @CreateGoal
-    public ResponseEntity<ApiResponseDto<GoalResponseDto>> createGoal(
-            @Parameter(name = "groupId", description = "모임 ULID", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string", example = "01HGW2N8G9PZ95HQ3K7GQWX9TF")) @PathVariable String groupId,
-            @Valid @RequestBody GoalCreateRequestDto request,
-            @AuthenticationPrincipal UserDetails userDetails) {
-
-        GoalResponseDto goal = groupService.createGoal(groupId, request, userDetails.getUsername());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponseDto.success("목표가 성공적으로 생성되었습니다.", goal));
-    }
-
-    /**
-     * 모임의 모든 목표를 조회합니다.
-     * 
-     * @param groupId 모임 ULID
-     * @return 목표 목록
-     */
-    @GetMapping("/{groupId}/goals")
-    @GetGoals
-    public ResponseEntity<ApiResponseDto<List<GoalResponseDto>>> getGoals(
-            @Parameter(name = "groupId", description = "모임 ULID", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string", example = "01HGW2N8G9PZ95HQ3K7GQWX9TF")) @PathVariable String groupId) {
-
-        List<GoalResponseDto> goals = groupService.getGoals(groupId);
-        return ResponseEntity.ok(ApiResponseDto.success(goals));
-    }
-
-    /**
-     * 모임의 특정 목표를 수정합니다.
-     * 
-     * @param groupId     모임 ULID
-     * @param goalId      수정할 목표 ID
-     * @param request     수정할 목표 정보
-     * @param userDetails 인증된 사용자 정보
-     * @return 수정된 목표 정보
-     */
-    @PutMapping("/{groupId}/goals/{goalId}")
-    @UpdateGoal
-    public ResponseEntity<ApiResponseDto<GoalResponseDto>> updateGoal(
-            @Parameter(name = "groupId", description = "모임 ULID", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string", example = "01HGW2N8G9PZ95HQ3K7GQWX9TF")) @PathVariable String groupId,
-            @Parameter(name = "goalId", description = "목표 ID", required = true, in = ParameterIn.PATH, schema = @Schema(type = "integer", example = "1")) @PathVariable Long goalId,
-            @Valid @RequestBody GoalUpdateRequestDto request,
-            @AuthenticationPrincipal UserDetails userDetails) {
-
-        GoalResponseDto goal = groupService.updateGoal(groupId, goalId, request,
-                userDetails.getUsername());
-        return ResponseEntity.ok(ApiResponseDto.success("목표가 성공적으로 수정되었습니다.", goal));
-    }
-
-    /**
-     * 모임의 특정 목표를 삭제합니다.
-     * 
-     * @param groupId     모임 ULID
-     * @param goalId      삭제할 목표 ID
-     * @param userDetails 인증된 사용자 정보
-     * @return 삭제 성공 메시지
-     */
-    @DeleteMapping("/{groupId}/goals/{goalId}")
-    @DeleteGoal
-    public ResponseEntity<ApiResponseDto<Void>> deleteGoal(
-            @Parameter(name = "groupId", description = "모임 ULID", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string", example = "01HGW2N8G9PZ95HQ3K7GQWX9TF")) @PathVariable String groupId,
-            @Parameter(name = "goalId", description = "목표 ID", required = true, in = ParameterIn.PATH, schema = @Schema(type = "integer", example = "1")) @PathVariable Long goalId,
-            @AuthenticationPrincipal UserDetails userDetails) {
-
-        groupService.deleteGoal(groupId, goalId, userDetails.getUsername());
-        return ResponseEntity.ok(ApiResponseDto.success("목표가 성공적으로 삭제되었습니다.", null));
-    }
 }
