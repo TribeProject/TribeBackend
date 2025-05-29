@@ -8,6 +8,12 @@ plugins {
 group = 'com.unity'
 version = '0.0.1-SNAPSHOT'
 
+// querydsl
+def querydslSrcDir = 'src/main/generated'
+ext {
+    querydslVersion = '5.0.0'  // 원하는 버전으로 설정
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -75,15 +81,22 @@ clean {
     delete file(querydslSrcDir)
 }
 
+
+// checkstyle
 checkstyle {
     toolVersion = '10.12.5'
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
     maxWarnings = 0
 }
-
 tasks.withType(Checkstyle) {
     reports {
         xml.required = false
         html.required = true
     }
+}
+tasks.named('checkstyleMain') {
+    dependsOn tasks.named('compileTestJava')
+}
+tasks.named('checkstyleTest') {
+    dependsOn tasks.named('compileTestJava')
 }
