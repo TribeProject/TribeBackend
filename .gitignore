@@ -43,6 +43,7 @@ Thumbs.db
 ### VS Code ###
 .vscode/
 
+src/main/generated
 src/main/resources/application*.yml
 
 *.swp
