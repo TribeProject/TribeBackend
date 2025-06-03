@@ -7,6 +7,12 @@ plugins {
 group = 'com.unity'
 version = '0.0.1-SNAPSHOT'
 
+// querydsl
+def querydslSrcDir = 'src/main/generated'
+ext {
+    querydslVersion = '5.0.0'  // 원하는 버전으로 설정
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -28,8 +34,23 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
     implementation 'org.mariadb.jdbc:mariadb-java-client:3.3.3'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+
+    // querydsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // jwt
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -40,3 +61,42 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     implementation 'de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0'
 }
+
+// querydsl
+compileJava {
+    options.compilerArgs << '-Aquerydsl.generatedAnnotationClass=jakarta.annotation.Generated'
+}
+sourceSets {
+    main {
+        java {
+            srcDirs += [querydslSrcDir]
+        }
+    }
+}
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory = file(querydslSrcDir)
+}
+clean {
+    delete file(querydslSrcDir)
+}
+
+
+// checkstyle
+/*
+checkstyle {
+    toolVersion = '10.12.5'
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    maxWarnings = 0
+}
+tasks.withType(Checkstyle) {
+    reports {
+        xml.required = false
+        html.required = true
+    }
+}
+tasks.named('checkstyleMain') {
+    dependsOn tasks.named('compileTestJava')
+}
+tasks.named('checkstyleTest') {
+    dependsOn tasks.named('compileTestJava')
+}*/

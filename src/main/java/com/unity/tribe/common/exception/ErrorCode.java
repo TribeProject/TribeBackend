@@ -20,6 +20,7 @@ public enum ErrorCode {
     FORBIDDEN("AUTH_002", "접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
     INVALID_TOKEN("AUTH_003", "유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED),
     EXPIRED_TOKEN("AUTH_004", "토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED),
+    NAVER_LOGIN_FAILED("AUTH_005", "네이버 로그인 실패", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // === 사용자 도메인 ===
     USER_NOT_FOUND("USER_001", "존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND),

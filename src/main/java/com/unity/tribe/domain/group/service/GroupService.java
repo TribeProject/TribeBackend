@@ -5,11 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 import com.unity.tribe.common.model.CommonPageDto;
-import com.unity.tribe.domain.group.dto.request.GoalCreateRequestDto;
-import com.unity.tribe.domain.group.dto.request.GoalUpdateRequestDto;
-import com.unity.tribe.domain.group.dto.request.GroupCreateRequestDto;
-import com.unity.tribe.domain.group.dto.request.GroupFilterRequestDto;
-import com.unity.tribe.domain.group.dto.request.GroupUpdateRequestDto;
+import com.unity.tribe.domain.group.dto.request.*;
 import com.unity.tribe.domain.group.dto.response.GoalResponseDto;
 import com.unity.tribe.domain.group.dto.response.GroupDetailResponseDto;
 import com.unity.tribe.domain.group.dto.response.GroupListResponseDto;
