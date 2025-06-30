@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
  * 차단 관련 컨트롤러
  */
 @RestController
-@RequestMapping("/api/v1/blocks")
+@RequestMapping("/v1/blocks")
 @RequiredArgsConstructor
 @BlockApi
 public class BlockController {
