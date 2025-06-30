@@ -29,7 +29,7 @@ public interface GroupService {
     CommonPageDto<List<GroupListResponseDto>> getGroupsWithFilter(Pageable pageable, GroupFilterRequestDto filter);
 
     /**
-     * 그룹 목록을 조회합니다. (기존 호환성 유지)
+     * 그룹 목록을 조회합니다.
      * 
      * @param pageable 페이지 정보
      * @param status   그룹 상태
@@ -38,17 +38,18 @@ public interface GroupService {
     CommonPageDto<List<GroupListResponseDto>> getGroups(Pageable pageable, String status);
 
     /**
-     * 카테고리별 그룹 목록을 조회합니다. (기존 호환성 유지)
+     * 카테고리별 그룹 목록을 조회합니다.
      * 
-     * @param categoryId 카테고리 ID
-     * @param pageable   페이지 정보
-     * @param status     그룹 상태
+     * @param categoryCode 카테고리 코드
+     * @param pageable     페이지 정보
+     * @param status       그룹 상태
      * @return 그룹 목록 페이지 정보
      */
-    CommonPageDto<List<GroupListResponseDto>> getGroupsByCategory(Long categoryId, Pageable pageable, String status);
+    CommonPageDto<List<GroupListResponseDto>> getGroupsByCategory(String categoryCode, Pageable pageable,
+            String status);
 
     /**
-     * 키워드로 그룹을 검색합니다. (기존 호환성 유지)
+     * 키워드로 그룹을 검색합니다.
      * 
      * @param keyword  검색 키워드
      * @param pageable 페이지 정보

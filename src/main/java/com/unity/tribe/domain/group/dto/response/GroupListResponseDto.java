@@ -8,11 +8,11 @@ import lombok.Getter;
 @Getter
 @Builder
 public class GroupListResponseDto {
-    private Long id;
+    private String id;
     private String name;
     private String description;
     private String imageUrl;
-    private Long categoryId;
+    private String categoryCode;
     private String categoryName;
     private Integer currentMembers;
     private Integer maxMembers;

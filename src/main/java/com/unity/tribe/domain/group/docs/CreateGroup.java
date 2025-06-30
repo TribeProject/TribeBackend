@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
             {
               "title": "모임명",
               "description": "모임 설명",
-              "categoryId": "EA",
+              "categoryCode": "EA",
               "groupType": "MISSION",
               "meetingType": "OFFLINE",
               "locationAddress": "서울시 동작구",
@@ -51,8 +51,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                         "hostId": "01HGW1MHT3RJYK5MXRZ6P5QACM",
                         "hostName": "닉네임",
                         "hostEmail": "email@example.com",
-                        "categoryId": "EA",
-                        "categoryName": "운동/액티비티",
+                        "categoryCode": "EA",
+                        "categoryName": "EXERCISE_AND_ACTIVITY",
                         "groupType": "MISSION",
                         "meetingType": "OFFLINE",
                         "locationAddress": "서울시 동작구",
@@ -78,7 +78,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                 @ExampleObject(name = "유효하지 않은 카테고리", value = """
                             {
                               "status": 400,
-                              "message": "유효하지 않은 카테고리입니다.",
+                              "message": "유효하지 않은 카테고리입니다. 사용 가능한 값: [FOOD, TRIP, EXERCISE_AND_ACTIVITY, CULTURE_AND_ART, SELF_DEVELOPMENT, GAME, BEAUTY_AND_FASHION, VOLUNTEER]",
                               "result": false,
                               "data": null
                             }

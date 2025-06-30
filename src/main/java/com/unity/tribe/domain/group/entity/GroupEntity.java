@@ -1,20 +1,17 @@
 package com.unity.tribe.domain.group.entity;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +23,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class GroupEntity {
 
     public enum GroupStatus {
@@ -49,12 +47,8 @@ public class GroupEntity {
     private String hostId;
 
     @Basic
-    @Column(name = "category_id", nullable = false)
-    private Long categoryId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", insertable = false, updatable = false)
-    private GroupCategory category;
+    @Column(name = "category_code", nullable = false)
+    private String categoryCode;
 
     @Basic
     @Column(name = "title", nullable = false)
@@ -120,42 +114,4 @@ public class GroupEntity {
     @Basic
     @Column(name = "expired_at")
     private Timestamp expiredAt;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        GroupEntity that = (GroupEntity) o;
-        return Objects.equals(groupId, that.groupId)
-                && Objects.equals(hostId, that.hostId)
-                && Objects.equals(categoryId, that.categoryId)
-                && Objects.equals(title, that.title)
-                && Objects.equals(description, that.description)
-                && Objects.equals(thumbnail, that.thumbnail)
-                && Objects.equals(groupType, that.groupType)
-                && Objects.equals(meetingType, that.meetingType)
-                && Objects.equals(locationAddress, that.locationAddress)
-                && Objects.equals(locationLatitude, that.locationLatitude)
-                && Objects.equals(locationLongitude, that.locationLongitude)
-                && Objects.equals(participants, that.participants)
-                && Objects.equals(genderRestriction, that.genderRestriction)
-                && Objects.equals(minAge, that.minAge)
-                && Objects.equals(maxAge, that.maxAge)
-                && Objects.equals(status, that.status)
-                && Objects.equals(createdAt, that.createdAt)
-                && Objects.equals(updatedAt, that.updatedAt)
-                && Objects.equals(expiredAt, that.expiredAt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(groupId, hostId, categoryId, title, description, thumbnail,
-                groupType, meetingType, locationAddress, locationLatitude,
-                locationLongitude, participants, genderRestriction, minAge,
-                maxAge, status, createdAt, updatedAt, expiredAt);
-    }
 }

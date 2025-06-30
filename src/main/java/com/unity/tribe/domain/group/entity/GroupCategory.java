@@ -1,19 +1,16 @@
 package com.unity.tribe.domain.group.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.unity.tribe.common.model.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,12 +38,41 @@ public class GroupCategory extends BaseEntity {
             this.description = description;
         }
 
+        @JsonValue
         public String getCode() {
             return code;
         }
 
         public String getDescription() {
             return description;
+        }
+
+        /**
+         * JSON에서 code로 enum 찾기
+         * 
+         * @param code 찾을 코드 문자열 (e.g. "EA", "F")
+         * @return 해당하는 GroupCategoryCode
+         * @throws IllegalArgumentException 해당하는 코드가 없을 경우
+         */
+        @JsonCreator
+        public static GroupCategoryCode fromCode(String code) {
+            for (GroupCategoryCode categoryCode : values()) {
+                if (categoryCode.getCode().equals(code)) {
+                    return categoryCode;
+                }
+            }
+            throw new IllegalArgumentException("Invalid category code: " + code);
+        }
+
+        /**
+         * 코드 문자열로 GroupCategoryCode를 찾습니다.
+         * 
+         * @param code 찾을 코드 문자열 (e.g. "EA", "F")
+         * @return 해당하는 GroupCategoryCode
+         * @throws IllegalArgumentException 해당하는 코드가 없을 경우
+         */
+        public static GroupCategoryCode findByCode(String code) {
+            return fromCode(code); // 기존 메서드는 fromCode 호출
         }
     }
 
@@ -66,9 +92,6 @@ public class GroupCategory extends BaseEntity {
 
     @Column(nullable = false, length = 200)
     private String description;
-
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<GroupEntity> groups = new ArrayList<>();
 
     @Builder
     public GroupCategory(GroupCategoryCode code, String name, String description) {
