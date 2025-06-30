@@ -1,40 +1,49 @@
 package com.unity.tribe.common.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.unity.tribe.common.config.security.JwtTokenProvider;
-import com.unity.tribe.domain.auth.service.AuthService;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용하지 않음
+                .formLogin(form -> form.disable()) // 폼 로그인 비활성화
+                .httpBasic(basic -> basic.disable()) // HTTP Basic 인증 비활성화
                 .authorizeHttpRequests(authorize -> authorize
-                        //.requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        // Swagger UI 경로 (context-path 포함)
+                        .requestMatchers("/api/swagger-ui.html", "/api/swagger-ui/**", "/api/v3/api-docs/**",
+                                "/api/api-docs/**", "/api/swagger-resources/**", "/api/webjars/**")
+                        .permitAll()
+                        // Root level Swagger 경로도 허용
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**",
-                                "/api-docs/**", "/swagger-resources/**", "/wears/**",
-                                "/swagger-ui/index.html") // Swagger
-                                                          // UI 경로
-                                                          // 허용
-                        .permitAll().requestMatchers("/actuator/**").permitAll() // actuator 경로 허용
+                                "/api-docs/**", "/swagger-resources/**", "/webjars/**")
+                        .permitAll()
+                        .requestMatchers("/api/actuator/**", "/actuator/**").permitAll() // actuator 경로 허용
+                        .requestMatchers("/api/v1/auth/dev/**").permitAll() // 개발용 Auth API 허용
+                        .requestMatchers("/api/v1/auth/sso/**").permitAll() // SSO 로그인 API 허용
+                        // 추후 관리자 권한이 필요할 때 사용
+                        // .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, authService), UsernamePasswordAuthenticationFilter.class)
-                .formLogin(formLogin -> formLogin.permitAll());
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))) // 401 응답
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // JWT 필터 추가
+
         return http.build();
     }
-
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    private AuthService authService;
 }

@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
  * 신고 관련 컨트롤러
  */
 @RestController
-@RequestMapping("/api/v1/reports")
+@RequestMapping("/v1/reports")
 @RequiredArgsConstructor
 @ReportApi
 public class ReportController {

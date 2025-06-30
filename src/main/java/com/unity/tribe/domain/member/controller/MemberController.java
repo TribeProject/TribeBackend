@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
  * 모임 멤버 관련 컨트롤러
  */
 @RestController
-@RequestMapping("/api/v1/groups/{groupId}/members")
+@RequestMapping("/v1/groups/{groupId}/members")
 @RequiredArgsConstructor
 @MemberApi
 public class MemberController {

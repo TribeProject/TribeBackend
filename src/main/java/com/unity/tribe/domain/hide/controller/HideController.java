@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
  * 숨김 관련 컨트롤러
  */
 @RestController
-@RequestMapping("/api/v1/hides")
+@RequestMapping("/v1/hides")
 @RequiredArgsConstructor
 @HideApi
 public class HideController {

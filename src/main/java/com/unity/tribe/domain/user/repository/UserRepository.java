@@ -11,6 +11,14 @@ import com.unity.tribe.domain.user.entity.UserEntity;
 public interface UserRepository extends JpaRepository<UserEntity, String> {
 
     Optional<UserEntity> findByEmail(String email);
-    Optional<UserEntity> findByUserId(String userId);
-    boolean existsByUserId(String userId);
+
+    Optional<UserEntity> findByNickname(String nickname);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByNickname(String nickname);
+
+    default Optional<UserEntity> findByUserId(String userId) {
+        return findById(userId);
+    }
 }

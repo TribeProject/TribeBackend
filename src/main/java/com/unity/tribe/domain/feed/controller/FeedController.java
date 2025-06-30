@@ -41,7 +41,7 @@ import lombok.RequiredArgsConstructor;
  * 피드 인증 피드 관련 컨트롤러
  */
 @RestController
-@RequestMapping("/api/v1/feeds")
+@RequestMapping("/v1/feeds")
 @RequiredArgsConstructor
 @FeedApi
 public class FeedController {
@@ -54,7 +54,7 @@ public class FeedController {
      * @param groupId 모임 ULID
      * @param page    페이지 번호 (0부터 시작)
      * @param size    페이지 크기
-     * @param sort    정렬 조건 (예: createdAt,desc)
+     * @param sort    정렬 조건 (e.g. createdAt,desc)
      * @return 페이징된 인증 피드 목록
      */
     @GetMapping("/groups/{groupId}")
@@ -63,7 +63,7 @@ public class FeedController {
             @Parameter(description = "모임 ID") @PathVariable String groupId,
             @Parameter(description = "페이지 번호 (0부터 시작)") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "정렬 기준 (예: createdAt,desc)") @RequestParam(required = false) String sort) {
+            @Parameter(description = "정렬 기준 (e.g. createdAt,desc)") @RequestParam(required = false) String sort) {
 
         Pageable pageable = createPageable(page, size, sort);
         CommonPageDto<List<FeedResponseDto>> feeds = feedService.getFeeds(groupId,
@@ -76,7 +76,7 @@ public class FeedController {
      * 
      * @param page        페이지 번호 (0부터 시작)
      * @param size        페이지 크기
-     * @param sort        정렬 조건 (예: createdAt,desc)
+     * @param sort        정렬 조건 (e.g. createdAt,desc)
      * @param userDetails 인증된 사용자 정보
      * @return 페이징된 사용자의 인증 피드 목록
      */
@@ -85,7 +85,7 @@ public class FeedController {
     public ResponseEntity<ApiResponseDto<CommonPageDto<List<FeedResponseDto>>>> getMyFeeds(
             @Parameter(description = "페이지 번호 (0부터 시작)") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "정렬 기준 (예: createdAt,desc)") @RequestParam(required = false) String sort,
+            @Parameter(description = "정렬 기준 (e.g. createdAt,desc)") @RequestParam(required = false) String sort,
             @AuthenticationPrincipal UserDetails userDetails) {
 
         Pageable pageable = createPageable(page, size, sort);
@@ -159,7 +159,7 @@ public class FeedController {
      * @param keyword 검색 키워드
      * @param page    페이지 번호 (0부터 시작)
      * @param size    페이지 크기
-     * @param sort    정렬 조건 (예: createdAt,desc)
+     * @param sort    정렬 조건 (e.g. createdAt,desc)
      * @return 검색된 인증 피드 목록
      */
     @GetMapping("/groups/{groupId}/search")
@@ -169,7 +169,7 @@ public class FeedController {
             @Parameter(description = "검색 키워드") @RequestParam String keyword,
             @Parameter(description = "페이지 번호 (0부터 시작)") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "정렬 기준 (예: createdAt,desc)") @RequestParam(required = false) String sort) {
+            @Parameter(description = "정렬 기준 (e.g. createdAt,desc)") @RequestParam(required = false) String sort) {
 
         Pageable pageable = createPageable(page, size, sort);
         CommonPageDto<List<FeedResponseDto>> feeds = feedService

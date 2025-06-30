@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "관리자 BO API")
 @RestController
-@RequestMapping("/api/v1/admins")
+@RequestMapping("/v1/admin")
 public class AdminController {
 
     /**

@@ -34,7 +34,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                         "hostName": "닉네임",
                         "hostEmail": "nickname@example.com",
                         "categoryId": "EA",
-                        "categoryName": "운동/액티비티",
+                        "categoryName": "EXERCISE_AND_ACTIVITY",
                         "groupType": "REGULAR",
                         "meetingType": "OFFLINE",
                         "locationAddress": "서울시 마포구",

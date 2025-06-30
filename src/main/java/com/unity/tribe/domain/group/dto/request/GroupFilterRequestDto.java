@@ -45,7 +45,7 @@ public class GroupFilterRequestDto {
 
     /**
      * 지역 필터 (여러 지역 가능)
-     * 예: ["서울", "경기", "인천"]
+     * e.g. ["서울", "경기", "인천"]
      */
     @Size(max = 10, message = "지역 필터는 최대 10개까지 가능합니다.")
     private List<String> regions;
