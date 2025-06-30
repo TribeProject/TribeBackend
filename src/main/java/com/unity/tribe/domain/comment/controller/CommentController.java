@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
  * 댓글 관련 컨트롤러
  */
 @RestController
-@RequestMapping("/api/v1/comments")
+@RequestMapping("/v1/comments")
 @RequiredArgsConstructor
 @CommentApi
 public class CommentController {

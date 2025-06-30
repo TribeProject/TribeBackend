@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
  * 모임 목표 관련 컨트롤러
  */
 @RestController
-@RequestMapping("/api/v1/groups")
+@RequestMapping("/v1/groups")
 @RequiredArgsConstructor
 @GoalApi
 public class GoalController {

@@ -50,7 +50,7 @@ import lombok.RequiredArgsConstructor;
  * 모임 관련 컨트롤러
  */
 @RestController
-@RequestMapping("/api/v1/groups")
+@RequestMapping("/v1/groups")
 @RequiredArgsConstructor
 @GroupApi
 public class GroupController {
@@ -97,7 +97,7 @@ public class GroupController {
 
             @Parameter(name = "endDate", description = "모임 종료일(YYYY-MM-DD)", in = ParameterIn.QUERY, schema = @Schema(type = "string", format = "date", example = "2025-12-31")) @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
 
-            @Parameter(name = "regions", description = "지역 필터 (쉼표로 구분, 예: 서울,경기,인천)", in = ParameterIn.QUERY, schema = @Schema(type = "string", example = "서울,경기,인천")) @RequestParam(required = false) List<String> regions,
+            @Parameter(name = "regions", description = "지역 필터 (쉼표로 구분, e.g. 서울,경기,인천)", in = ParameterIn.QUERY, schema = @Schema(type = "string", example = "서울,경기,인천")) @RequestParam(required = false) List<String> regions,
 
             @Parameter(name = "minAge", description = "최소 나이 제한", in = ParameterIn.QUERY, schema = @Schema(type = "integer", minimum = "0", maximum = "100", example = "25")) @RequestParam(required = false) Integer minAge,
 
@@ -139,7 +139,7 @@ public class GroupController {
     /**
      * 특정 카테고리의 모임 목록을 조회합니다.
      * 
-     * @param categoryId        조회할 카테고리 ID
+     * @param categoryCode      조회할 카테고리 코드 (e.g. EA, F, T 등)
      * @param page              페이지 번호
      * @param size              페이지 크기
      * @param sort              정렬 조건
@@ -155,10 +155,10 @@ public class GroupController {
      * @param maxParticipants   최대 참여자 수
      * @return 필터링된 모임 목록
      */
-    @GetMapping("/category/{categoryId}")
+    @GetMapping("/category/{categoryCode}")
     @GetGroupsByCategory
     public ResponseEntity<ApiResponseDto<CommonPageDto<List<GroupListResponseDto>>>> getGroupsByCategory(
-            @Parameter(name = "categoryId", description = "카테고리 ID", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string", example = "EA")) @PathVariable String categoryId,
+            @Parameter(name = "categoryCode", description = "카테고리 코드", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string", example = "EA")) @PathVariable String categoryCode,
 
             @Parameter(name = "page", description = "페이지 번호 (0부터 시작)", in = ParameterIn.QUERY, schema = @Schema(type = "integer", defaultValue = "0")) @RequestParam(defaultValue = "0") int page,
 
@@ -193,23 +193,10 @@ public class GroupController {
         // 페이징 및 정렬 설정
         Pageable pageable = createPageable(page, size, sort);
 
-        // 필터 조건 설정 (카테고리 ID 포함)
-        GroupFilterRequestDto filterRequest = GroupFilterRequestDto.builder()
-                .keyword(keyword)
-                .status(status)
-                .startDate(startDate)
-                .endDate(endDate)
-                .regions(regions)
-                .minAge(minAge)
-                .maxAge(maxAge)
-                .genderRestriction(genderRestriction)
-                .minParticipants(minParticipants)
-                .maxParticipants(maxParticipants)
-                .categories(List.of(categoryId)) // 카테고리 ID를 필터에 포함
-                .build();
+        // 카테고리 코드를 직접 서비스에 전달
+        CommonPageDto<List<GroupListResponseDto>> groups = groupService.getGroupsByCategory(
+                categoryCode, pageable, status);
 
-        // 서비스 계층에 필터링된 모임 목록 요청
-        CommonPageDto<List<GroupListResponseDto>> groups = groupService.getGroupsWithFilter(pageable, filterRequest);
         return ResponseEntity.ok(ApiResponseDto.success(groups));
     }
 
