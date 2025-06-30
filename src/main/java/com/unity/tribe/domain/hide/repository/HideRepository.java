@@ -1,5 +1,7 @@
 package com.unity.tribe.domain.hide.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +22,7 @@ public interface HideRepository extends JpaRepository<HideEntity, Long> {
 
     // 숨김 여부 확인
     boolean existsByUserIdAndTargetTypeAndTargetId(String userId, TargetType targetType, String targetId);
+
+    // 숨김 정보 조회
+    Optional<HideEntity> findByUserIdAndTargetTypeAndTargetId(String userId, TargetType targetType, String targetId);
 }
