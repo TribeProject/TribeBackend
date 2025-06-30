@@ -43,6 +43,7 @@ Thumbs.db
 ### VS Code ###
 .vscode/
 
+src/main/generated
 src/main/resources/application*.yml
 
 *.swp
@@ -52,3 +53,6 @@ src/main/resources/application*.yml
 /gradle/wrapper
 
 .env*
+
+src/main/generated
+database

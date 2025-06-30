@@ -10,21 +10,19 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용하지
-                                                                                                              // 않음
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용하지 않음
                 .formLogin(form -> form.disable()) // 폼 로그인 비활성화
                 .httpBasic(basic -> basic.disable()) // HTTP Basic 인증 비활성화
                 .authorizeHttpRequests(authorize -> authorize
@@ -38,6 +36,9 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/api/actuator/**", "/actuator/**").permitAll() // actuator 경로 허용
                         .requestMatchers("/api/v1/auth/dev/**").permitAll() // 개발용 Auth API 허용
+                        .requestMatchers("/api/v1/auth/sso/**").permitAll() // SSO 로그인 API 허용
+                        // 추후 관리자 권한이 필요할 때 사용
+                        // .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))) // 401 응답

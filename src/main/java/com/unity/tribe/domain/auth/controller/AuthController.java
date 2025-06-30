@@ -5,16 +5,23 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.unity.tribe.common.exception.ErrorCode;
+import com.unity.tribe.common.exception.TribeAuthenticateException;
 import com.unity.tribe.common.model.ApiResponseDto;
 import com.unity.tribe.common.util.JwtUtil;
 import com.unity.tribe.domain.auth.docs.DevTokenApi;
 import com.unity.tribe.domain.auth.dto.request.DevTokenRequestDto;
+import com.unity.tribe.domain.auth.dto.request.LoginRequestDto;
+import com.unity.tribe.domain.auth.dto.response.LoginResponseDto;
 import com.unity.tribe.domain.auth.dto.response.TokenResponseDto;
+import com.unity.tribe.domain.auth.service.AuthService;
 import com.unity.tribe.domain.user.entity.UserEntity;
 import com.unity.tribe.domain.user.repository.UserRepository;
 
@@ -32,6 +39,7 @@ public class AuthController {
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final AuthService authService;
     private final ULID ulid = new ULID();
 
     /**
@@ -93,5 +101,17 @@ public class AuthController {
                 : "새로운 개발용 사용자가 생성되고 토큰이 성공적으로 발급되었습니다.";
 
         return ResponseEntity.ok(ApiResponseDto.success(message, tokenResponse));
+    }
+
+    @PostMapping("/sso/login")
+    public ResponseEntity<LoginResponseDto> login(@RequestHeader String Authorization, @RequestBody LoginRequestDto loginRequestDto) {
+
+        if (StringUtils.hasText(Authorization)) {
+            throw new TribeAuthenticateException(ErrorCode.INVALID_TOKEN);
+        }
+
+        LoginResponseDto responseDto = authService.ssoLogin(loginRequestDto);
+
+        return ResponseEntity.ok(responseDto);
     }
 }

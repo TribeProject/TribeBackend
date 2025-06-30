@@ -1,17 +1,23 @@
 package com.unity.tribe.domain.auth.entity;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "auth_token", schema = "tribe", catalog = "")
 public class AuthTokenEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "auth_token_id")
-    private int authTokenId;
+    private String authTokenId;
     @Basic
     @Column(name = "user_id")
     private String userId;
@@ -23,19 +29,19 @@ public class AuthTokenEntity {
     private String refreshToken;
     @Basic
     @Column(name = "expires_at")
-    private Timestamp expiresAt;
+    private LocalDateTime expiresAt;
     @Basic
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
     @Basic
     @Column(name = "updated_at")
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
 
-    public int getAuthTokenId() {
+    public String getAuthTokenId() {
         return authTokenId;
     }
 
-    public void setAuthTokenId(int authTokenId) {
+    public void setAuthTokenId(String authTokenId) {
         this.authTokenId = authTokenId;
     }
 
@@ -63,37 +69,37 @@ public class AuthTokenEntity {
         this.refreshToken = refreshToken;
     }
 
-    public Timestamp getExpiresAt() {
+    public LocalDateTime getExpiresAt() {
         return expiresAt;
     }
 
-    public void setExpiresAt(Timestamp expiresAt) {
+    public void setExpiresAt(LocalDateTime expiresAt) {
         this.expiresAt = expiresAt;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { 
-            return true; 
+        if (this == o) {
+            return true;
         }
         if (o == null || getClass() != o.getClass()) {
-            return false; 
+            return false;
         }
         AuthTokenEntity that = (AuthTokenEntity) o;
         return authTokenId == that.authTokenId && Objects.equals(userId, that.userId) && Objects.equals(accessToken, that.accessToken) && Objects.equals(refreshToken, that.refreshToken) && Objects.equals(expiresAt, that.expiresAt) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
