@@ -9,11 +9,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
- * 피드 인증 컨트롤러 Swagger 문서 태그
+ * 피드 컨트롤러 Swagger 문서 태그
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Tag(name = "Certification")
+@Tag(name = "Feeds")
 @SecurityRequirement(name = "bearerAuth")
 public @interface FeedApi {
 }
