@@ -1,4 +1,4 @@
-package com.unity.tribe.domain.member.dto.response;
+package com.unity.tribe.domain.group.dto.response;
 
 import java.time.LocalDateTime;
 
@@ -10,8 +10,6 @@ import lombok.Getter;
 public class MemberResponseDto {
     private String userId;
     private String nickname;
-    private String profileImg;
-    private String role; // "MEMBER", "HOST"
-    private String status; // "ACTIVE", "EXITED"
+    private String role;
     private LocalDateTime joinedAt;
 }
