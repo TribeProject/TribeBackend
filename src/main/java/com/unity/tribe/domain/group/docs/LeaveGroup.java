@@ -18,11 +18,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(summary = "모임 탈퇴", description = "사용자가 모임에서 탈퇴합니다. 호스트는 탈퇴할 수 없습니다.")
 @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "탈퇴 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponseDto.class), examples = @ExampleObject(value = """
+        @ApiResponse(responseCode = "200", description = "탈퇴 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponseDto.class), examples = @ExampleObject(name = "탈퇴 성공", value = """
                     {
                       "status": 200,
                       "message": "한강 러닝크루 모임에서 성공적으로 탈퇴했습니다.",
                       "result": true,
+                      "data": null
+                    }
+                """))),
+        @ApiResponse(responseCode = "400", description = "잘못된 요청 (이미 탈퇴한 모임)", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponseDto.class), examples = @ExampleObject(name = "이미 탈퇴한 모임", value = """
+                    {
+                      "status": 400,
+                      "message": "이미 탈퇴한 모임입니다.",
+                      "result": false,
                       "data": null
                     }
                 """))),
@@ -50,7 +58,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                       "data": null
                     }
                 """))),
-        @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponseDto.class), examples = @ExampleObject(value = """
+        @ApiResponse(responseCode = "500", description = "서버 내부 오류", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponseDto.class), examples = @ExampleObject(value = """
                     {
                       "status": 500,
                       "message": "서버 오류가 발생했습니다.",

@@ -17,8 +17,8 @@ public class CommonPageDto<T> {
     private int totalPages;
     private T data;
 
-    public static <T> CommonPageDto of(int page, int size, int totalElements, int totalPages, T data) {
-        return CommonPageDto.builder()
+    public static <T> CommonPageDto<T> of(int page, int size, int totalElements, int totalPages, T data) {
+        return CommonPageDto.<T>builder()
                 .page(page)
                 .size(size)
                 .totalElements(totalElements)

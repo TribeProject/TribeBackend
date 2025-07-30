@@ -21,7 +21,7 @@ public class DateUtil {
     }
 
     public static String getLocalDateTimeToString(LocalDateTime localDateTime, String pattern) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        DateTimeFormatter.ofPattern(pattern);
         return localDateTime.format(DateTimeFormatter.ofPattern(pattern));
     }
 

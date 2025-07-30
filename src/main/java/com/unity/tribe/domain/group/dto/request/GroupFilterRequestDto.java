@@ -3,126 +3,117 @@ package com.unity.tribe.domain.group.dto.request;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-/**
- * 그룹 목록 필터링을 위한 요청 DTO
- */
 @Getter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@ToString
 public class GroupFilterRequestDto {
 
-    /**
-     * 검색 키워드 (제목, 설명에서 검색)
-     */
-    @Size(min = 1, max = 100, message = "검색 키워드는 1자 이상 100자 이하여야 합니다.")
+    // 키워드 검색 (제목, 설명)
     private String keyword;
 
-    /**
-     * 그룹 상태 (WAITING, ONGOING, FINISHED, DISBANDED)
-     */
-    @Pattern(regexp = "^(WAITING|ONGOING|FINISHED|DISBANDED)$", message = "그룹 상태는 WAITING, ONGOING, FINISHED, DISBANDED 중 하나여야 합니다.")
+    // 그룹 상태 필터
     private String status;
 
-    /**
-     * 모임 시작일 필터 (이 날짜 이후)
-     */
+    // 날짜 범위 필터
     private LocalDate startDate;
-
-    /**
-     * 모임 종료일 필터 (이 날짜 이전)
-     */
     private LocalDate endDate;
 
-    /**
-     * 지역 필터 (여러 지역 가능)
-     * e.g. ["서울", "경기", "인천"]
-     */
-    @Size(max = 10, message = "지역 필터는 최대 10개까지 가능합니다.")
+    // 지역 필터
     private List<String> regions;
 
-    /**
-     * 최소 나이 제한
-     */
-    @Min(value = 1, message = "최소 나이는 1 이상이어야 합니다.")
-    @Max(value = 100, message = "최소 나이는 100 이하여야 합니다.")
+    // 나이 제한 필터
     private Integer minAge;
-
-    /**
-     * 최대 나이 제한
-     */
-    @Min(value = 1, message = "최대 나이는 1 이상이어야 합니다.")
-    @Max(value = 100, message = "최대 나이는 100 이하여야 합니다.")
     private Integer maxAge;
 
-    /**
-     * 성별 제한 (ALL, MALE, FEMALE)
-     */
-    @Pattern(regexp = "^(NONE|MALE|FEMALE)$", message = "성별 제한은 NONE, MALE, FEMALE 중 하나여야 합니다.")
+    // 성별 제한 필터
     private String genderRestriction;
 
-    /**
-     * 최소 참여 인원
-     */
-    @Min(value = 1, message = "최소 참여 인원은 1 이상이어야 합니다.")
-    @Max(value = 100, message = "최소 참여 인원은 100 이하여야 합니다.")
+    // 참여 인원 필터
     private Integer minParticipants;
-
-    /**
-     * 최대 참여 인원
-     */
-    @Min(value = 1, message = "최대 참여 인원은 1 이상이어야 합니다.")
-    @Max(value = 100, message = "최대 참여 인원은 100 이하여야 합니다.")
     private Integer maxParticipants;
 
-    /**
-     * 모임 주제/카테고리 (여러 카테고리 가능)
-     */
-    @Size(max = 5, message = "카테고리 필터는 최대 5개까지 가능합니다.")
+    // 카테고리 필터
     private List<String> categories;
 
+    // 모임 유형 필터
+    private String groupType; // MISSION, CONTINUOUS
+
+    // 모임 방식 필터
+    private String meetingType; // ONLINE, OFFLINE
+
+    // 호스트 필터
+    private String hostId;
+
+    // 정렬 옵션
+    private String sortBy; // createdAt, participants, title, status
+    private String sortDirection; // ASC, DESC
+
     /**
-     * 필터가 비어있는지 확인
+     * 필터 조건이 비어있는지 확인
+     * 
+     * @return 모든 필터 조건이 비어있으면 true
      */
     public boolean isEmpty() {
-        return keyword == null && status == null && startDate == null && endDate == null &&
-                (regions == null || regions.isEmpty()) && minAge == null && maxAge == null &&
-                genderRestriction == null && minParticipants == null && maxParticipants == null &&
-                (categories == null || categories.isEmpty());
+        return (keyword == null || keyword.trim().isEmpty()) &&
+                (status == null || status.trim().isEmpty()) &&
+                startDate == null &&
+                endDate == null &&
+                (regions == null || regions.isEmpty()) &&
+                minAge == null &&
+                maxAge == null &&
+                (genderRestriction == null || genderRestriction.trim().isEmpty()) &&
+                minParticipants == null &&
+                maxParticipants == null &&
+                (categories == null || categories.isEmpty()) &&
+                (groupType == null || groupType.trim().isEmpty()) &&
+                (meetingType == null || meetingType.trim().isEmpty()) &&
+                (hostId == null || hostId.trim().isEmpty());
     }
 
     /**
-     * 키워드 검색이 있는지 확인
+     * 키워드 검색인지 확인
+     * 
+     * @return 키워드가 있으면 true
      */
     public boolean hasKeyword() {
         return keyword != null && !keyword.trim().isEmpty();
     }
 
     /**
-     * 날짜 필터가 있는지 확인
-     */
-    public boolean hasDateFilter() {
-        return startDate != null || endDate != null;
-    }
-
-    /**
      * 지역 필터가 있는지 확인
+     * 
+     * @return 지역 필터가 있으면 true
      */
-    public boolean hasRegionFilter() {
+    public boolean hasRegions() {
         return regions != null && !regions.isEmpty();
     }
 
     /**
+     * 카테고리 필터가 있는지 확인
+     * 
+     * @return 카테고리 필터가 있으면 true
+     */
+    public boolean hasCategories() {
+        return categories != null && !categories.isEmpty();
+    }
+
+    /**
+     * 날짜 범위 필터가 있는지 확인
+     * 
+     * @return 날짜 범위 필터가 있으면 true
+     */
+    public boolean hasDateRange() {
+        return startDate != null || endDate != null;
+    }
+
+    /**
      * 나이 필터가 있는지 확인
+     * 
+     * @return 나이 필터가 있으면 true
      */
     public boolean hasAgeFilter() {
         return minAge != null || maxAge != null;
@@ -130,15 +121,58 @@ public class GroupFilterRequestDto {
 
     /**
      * 참여 인원 필터가 있는지 확인
+     * 
+     * @return 참여 인원 필터가 있으면 true
      */
     public boolean hasParticipantsFilter() {
         return minParticipants != null || maxParticipants != null;
     }
 
     /**
-     * 카테고리 필터가 있는지 확인
+     * 빌더에서 trim된 문자열을 설정하는 정적 팩토리 메서드
      */
-    public boolean hasCategoryFilter() {
-        return categories != null && !categories.isEmpty();
+    public static GroupFilterRequestDtoBuilder safeBuilder() {
+        return new GroupFilterRequestDtoBuilder() {
+            @Override
+            public GroupFilterRequestDtoBuilder keyword(String keyword) {
+                return super.keyword(keyword != null ? keyword.trim() : null);
+            }
+
+            @Override
+            public GroupFilterRequestDtoBuilder status(String status) {
+                return super.status(status != null ? status.trim().toUpperCase() : null);
+            }
+
+            @Override
+            public GroupFilterRequestDtoBuilder genderRestriction(String genderRestriction) {
+                return super.genderRestriction(
+                        genderRestriction != null ? genderRestriction.trim().toUpperCase() : null);
+            }
+
+            @Override
+            public GroupFilterRequestDtoBuilder groupType(String groupType) {
+                return super.groupType(groupType != null ? groupType.trim().toUpperCase() : null);
+            }
+
+            @Override
+            public GroupFilterRequestDtoBuilder meetingType(String meetingType) {
+                return super.meetingType(meetingType != null ? meetingType.trim().toUpperCase() : null);
+            }
+
+            @Override
+            public GroupFilterRequestDtoBuilder hostId(String hostId) {
+                return super.hostId(hostId != null ? hostId.trim() : null);
+            }
+
+            @Override
+            public GroupFilterRequestDtoBuilder sortBy(String sortBy) {
+                return super.sortBy(sortBy != null ? sortBy.trim() : null);
+            }
+
+            @Override
+            public GroupFilterRequestDtoBuilder sortDirection(String sortDirection) {
+                return super.sortDirection(sortDirection != null ? sortDirection.trim().toUpperCase() : null);
+            }
+        };
     }
 }

@@ -46,6 +46,30 @@ public enum ErrorCode {
     INVALID_GROUP_STATUS("GROUP_003", "그룹 상태가 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
     GROUP_FULL("GROUP_004", "그룹 정원이 가득 찼습니다.", HttpStatus.BAD_REQUEST),
     GROUP_ACCESS_DENIED("GROUP_005", "그룹에 접근할 권한이 없습니다.", HttpStatus.FORBIDDEN),
+    GROUP_HOST_CANNOT_LEAVE("GROUP_006", "모임장은 모임을 떠날 수 없습니다.", HttpStatus.BAD_REQUEST),
+    GROUP_ALREADY_JOINED("GROUP_007", "이미 참여한 모임입니다.", HttpStatus.BAD_REQUEST),
+    GROUP_NOT_JOINED("GROUP_008", "참여하지 않은 모임입니다.", HttpStatus.BAD_REQUEST),
+    // 카테고리
+    CATEGORY_NOT_FOUND("GROUP_009", "카테고리를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    CATEGORY_INVALID_CODE("GROUP_010", "올바르지 않은 카테고리 코드입니다.", HttpStatus.BAD_REQUEST),
+    // 위치
+    LOCATION_REQUIRED_FOR_OFFLINE("GROUP_011", "오프라인 모임의 경우 위치 정보는 필수입니다.", HttpStatus.BAD_REQUEST),
+    LOCATION_INVALID_POSITION("GROUP_012", "올바르지 않은 위치 정보입니다.", HttpStatus.BAD_REQUEST),
+    // 나이 제한
+    INVALID_AGE_RANGE("GROUP_013", "최소 나이가 최대 나이보다 클 수 없습니다.", HttpStatus.BAD_REQUEST),
+    AGE_RESTRICTION_VIOLATION("GROUP_014", "나이 제한에 맞지 않습니다.", HttpStatus.BAD_REQUEST),
+
+    // === 목표 ===
+    GOAL_NOT_FOUND("GOAL_001", "목표를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    GOAL_INVALID_DATE_RANGE("GOAL_002", "목표 시작일이 종료일보다 이후일 수 없습니다.", HttpStatus.BAD_REQUEST),
+    GOAL_START_DATE_PAST("GOAL_003", "목표 시작일은 현재 날짜 이후여야 합니다.", HttpStatus.BAD_REQUEST),
+
+    // === 인증 규칙 ===
+    CERTIFICATION_RULE_NOT_FOUND("CERT_RULE_001", "인증 규칙을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    CERTIFICATION_RULE_INVALID_WEEKLY("CERT_RULE_002", "주간 인증 횟수와 선택된 요일의 개수가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+    CERTIFICATION_RULE_INVALID_MONTHLY("CERT_RULE_003", "월간 인증 일자가 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
+    CERTIFICATION_RULE_NO_METHOD("CERT_RULE_004", "텍스트 인증 또는 이미지 인증 중 최소 하나는 필수입니다.", HttpStatus.BAD_REQUEST),
+    CERTIFICATION_RULE_INVALID_FREQUENCY("CERT_RULE_005", "올바르지 않은 인증 주기입니다.", HttpStatus.BAD_REQUEST),
 
     // === 멤버 ===
     MEMBER_NOT_FOUND("MEMBER_001", "존재하지 않는 멤버입니다.", HttpStatus.NOT_FOUND),
@@ -99,7 +123,12 @@ public enum ErrorCode {
     CERTIFICATION_NOT_FOUND("CERT_001", "인증 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     CERTIFICATION_EXPIRED("CERT_002", "인증이 만료되었습니다.", HttpStatus.BAD_REQUEST),
     CERTIFICATION_ALREADY_VERIFIED("CERT_003", "이미 인증된 상태입니다.", HttpStatus.CONFLICT),
-    INVALID_CERTIFICATION_CODE("CERT_004", "유효하지 않은 인증 코드입니다.", HttpStatus.BAD_REQUEST);
+    INVALID_CERTIFICATION_CODE("CERT_004", "유효하지 않은 인증 코드입니다.", HttpStatus.BAD_REQUEST),
+
+    // === 일반 ===
+    NOT_IMPLEMENTED("GENERAL_001", "아직 구현되지 않은 기능입니다.", HttpStatus.NOT_IMPLEMENTED),
+    INVALID_REQUEST_DATA("GENERAL_002", "잘못된 요청 데이터입니다.", HttpStatus.BAD_REQUEST),
+    ULID_GENERATION_FAILED("GENERAL_003", "ULID 생성에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String code;
     private final String message;

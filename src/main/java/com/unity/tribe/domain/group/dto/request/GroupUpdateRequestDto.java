@@ -15,7 +15,7 @@ public class GroupUpdateRequestDto {
     @Size(min = 10, max = 1000, message = "그룹 설명은 10자 이상 1000자 이하여야 합니다.")
     private String description;
 
-    private Long categoryId;
+    private Long categoryCode;
 
     @Min(value = 2, message = "최대 멤버 수는 2명 이상이어야 합니다.")
     @Max(value = 100, message = "최대 멤버 수는 100명 이하여야 합니다.")

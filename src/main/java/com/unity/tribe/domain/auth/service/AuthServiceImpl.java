@@ -1,5 +1,6 @@
 package com.unity.tribe.domain.auth.service;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -13,15 +14,14 @@ import com.unity.tribe.common.exception.TribeApiException;
 import com.unity.tribe.common.exception.TribeAuthenticateException;
 import com.unity.tribe.common.model.enums.ExternalApiUrl;
 import com.unity.tribe.common.model.enums.SsoProvider;
-import com.unity.tribe.domain.auth.dto.response.NaverProfileResponseDto;
 import com.unity.tribe.domain.auth.dto.request.LoginRequestDto;
 import com.unity.tribe.domain.auth.dto.response.LoginResponseDto;
+import com.unity.tribe.domain.auth.dto.response.NaverProfileResponseDto;
 import com.unity.tribe.domain.auth.dto.response.TokenInfoDto;
 import com.unity.tribe.domain.auth.entity.AuthTokenEntity;
 import com.unity.tribe.domain.auth.repository.AuthRepository;
 import com.unity.tribe.domain.user.repository.UserRepository;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -54,8 +54,7 @@ public class AuthServiceImpl implements AuthService {
                                 .provider("naver")
                                 .isRegistered(false)
                                 .data(profileResponseDto)
-                                .build()
-                        );
+                                .build());
             }
         } catch (Exception e) {
             throw new TribeAuthenticateException(ErrorCode.NAVER_LOGIN_FAILED);
@@ -80,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void validateToken(String userId, String token) {
 
-        if (userRepository.existsByUserId(userId)) {
+        if (!userRepository.existsById(userId)) {
             throw new TribeAuthenticateException(ErrorCode.USER_NOT_FOUND);
         }
 

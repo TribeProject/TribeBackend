@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.unity.tribe.domain.auth.entity.AuthTokenEntity;
 
 @Repository
-public interface AuthRepository extends JpaRepository<AuthTokenEntity, String> {
+public interface AuthRepository extends JpaRepository<AuthTokenEntity, Long> {
 
     Optional<AuthTokenEntity> findByUserId(String userId);
 }

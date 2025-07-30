@@ -11,18 +11,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.unity.tribe.common.model.ApiResponseDto;
 import com.unity.tribe.common.model.CommonPageDto;
-import com.unity.tribe.domain.group.docs.*;
+import com.unity.tribe.domain.group.docs.CreateGroup;
+import com.unity.tribe.domain.group.docs.DeleteGroup;
+import com.unity.tribe.domain.group.docs.GetGroup;
+import com.unity.tribe.domain.group.docs.GetGroups;
+import com.unity.tribe.domain.group.docs.GetGroupsByCategory;
+import com.unity.tribe.domain.group.docs.GroupApi;
+import com.unity.tribe.domain.group.docs.JoinGroup;
+import com.unity.tribe.domain.group.docs.LeaveGroup;
+import com.unity.tribe.domain.group.docs.SearchGroups;
+import com.unity.tribe.domain.group.docs.UpdateGroup;
 import com.unity.tribe.domain.group.dto.request.GroupCreateRequestDto;
 import com.unity.tribe.domain.group.dto.request.GroupFilterRequestDto;
 import com.unity.tribe.domain.group.dto.request.GroupUpdateRequestDto;
 import com.unity.tribe.domain.group.dto.response.GroupDetailResponseDto;
 import com.unity.tribe.domain.group.dto.response.GroupListResponseDto;
 import com.unity.tribe.domain.group.service.GroupService;
+import com.unity.tribe.domain.group.service.GroupServiceImpl;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -213,6 +232,166 @@ public class GroupController {
 
         // 서비스 계층에 검색 요청
         CommonPageDto<List<GroupListResponseDto>> groups = groupService.getGroupsWithFilter(pageable, filterRequest);
+        return ResponseEntity.ok(ApiResponseDto.success(groups));
+    }
+
+    /**
+     * 고급 검색 - 다양한 필터 조건을 조합한 검색
+     * 
+     * @param keyword           검색 키워드
+     * @param categories        카테고리 목록 (쉼표로 구분)
+     * @param regions           지역 목록 (쉼표로 구분)
+     * @param status            그룹 상태
+     * @param groupType         그룹 유형 (MISSION, CONTINUOUS)
+     * @param meetingType       모임 방식 (ONLINE, OFFLINE)
+     * @param minAge            최소 나이
+     * @param maxAge            최대 나이
+     * @param genderRestriction 성별 제한
+     * @param minParticipants   최소 참여 인원
+     * @param maxParticipants   최대 참여 인원
+     * @param startDate         생성일 시작 범위
+     * @param endDate           생성일 종료 범위
+     * @param page              페이지 번호
+     * @param size              페이지 크기
+     * @param sort              정렬 조건
+     * @return 검색된 그룹 목록
+     */
+    @GetMapping("/advanced-search")
+    @Operation(summary = "고급 그룹 검색", description = "다양한 필터 조건을 조합하여 그룹을 검색합니다.")
+    public ResponseEntity<ApiResponseDto<CommonPageDto<List<GroupListResponseDto>>>> advancedSearchGroups(
+            @Parameter(description = "검색 키워드") @RequestParam(required = false) String keyword,
+            @Parameter(description = "카테고리 목록") @RequestParam(required = false) List<String> categories,
+            @Parameter(description = "지역 목록") @RequestParam(required = false) List<String> regions,
+            @Parameter(description = "그룹 상태") @RequestParam(required = false) String status,
+            @Parameter(description = "그룹 유형") @RequestParam(required = false) String groupType,
+            @Parameter(description = "모임 방식") @RequestParam(required = false) String meetingType,
+            @Parameter(description = "최소 나이") @RequestParam(required = false) Integer minAge,
+            @Parameter(description = "최대 나이") @RequestParam(required = false) Integer maxAge,
+            @Parameter(description = "성별 제한") @RequestParam(required = false) String genderRestriction,
+            @Parameter(description = "최소 참여 인원") @RequestParam(required = false) Integer minParticipants,
+            @Parameter(description = "최대 참여 인원") @RequestParam(required = false) Integer maxParticipants,
+            @Parameter(description = "생성일 시작") @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @Parameter(description = "생성일 종료") @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            @Parameter(description = "페이지 번호") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "20") int size,
+            @Parameter(description = "정렬 조건") @RequestParam(defaultValue = "createdAt,desc") String sort) {
+
+        // 페이징 및 정렬 설정
+        Pageable pageable = createPageable(page, size, sort);
+
+        // 필터 조건 설정
+        GroupFilterRequestDto filterRequest = GroupFilterRequestDto.safeBuilder()
+                .keyword(keyword)
+                .categories(categories)
+                .regions(regions)
+                .status(status)
+                .groupType(groupType)
+                .meetingType(meetingType)
+                .minAge(minAge)
+                .maxAge(maxAge)
+                .genderRestriction(genderRestriction)
+                .minParticipants(minParticipants)
+                .maxParticipants(maxParticipants)
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
+
+        // 서비스 계층에 검색 요청
+        CommonPageDto<List<GroupListResponseDto>> groups = groupService.getGroupsWithFilter(pageable, filterRequest);
+        return ResponseEntity.ok(ApiResponseDto.success(groups));
+    }
+
+    /**
+     * 지역별 그룹 검색
+     * 
+     * @param regions 지역 목록
+     * @param page    페이지 번호
+     * @param size    페이지 크기
+     * @param sort    정렬 조건
+     * @return 지역별 그룹 목록
+     */
+    @GetMapping("/by-regions")
+    @Operation(summary = "지역별 그룹 검색", description = "특정 지역들의 그룹을 검색합니다.")
+    public ResponseEntity<ApiResponseDto<CommonPageDto<List<GroupListResponseDto>>>> getGroupsByRegions(
+            @Parameter(description = "지역 목록", required = true) @RequestParam List<String> regions,
+            @Parameter(description = "페이지 번호") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "20") int size,
+            @Parameter(description = "정렬 조건") @RequestParam(defaultValue = "createdAt,desc") String sort) {
+
+        Pageable pageable = createPageable(page, size, sort);
+        CommonPageDto<List<GroupListResponseDto>> groups = ((GroupServiceImpl) groupService)
+                .searchGroupsByRegions(regions, pageable);
+
+        return ResponseEntity.ok(ApiResponseDto.success(groups));
+    }
+
+    /**
+     * 키워드 검색 (간단 검색)
+     * 
+     * @param keyword 검색 키워드
+     * @param page    페이지 번호
+     * @param size    페이지 크기
+     * @param sort    정렬 조건
+     * @return 키워드 검색된 그룹 목록
+     */
+    @GetMapping("/simple-search")
+    @Operation(summary = "키워드 그룹 검색", description = "제목이나 설명에서 키워드를 검색합니다.")
+    public ResponseEntity<ApiResponseDto<CommonPageDto<List<GroupListResponseDto>>>> simpleSearchGroups(
+            @Parameter(description = "검색 키워드", required = true) @RequestParam String keyword,
+            @Parameter(description = "페이지 번호") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "20") int size,
+            @Parameter(description = "정렬 조건") @RequestParam(defaultValue = "createdAt,desc") String sort) {
+
+        Pageable pageable = createPageable(page, size, sort);
+        CommonPageDto<List<GroupListResponseDto>> groups = ((GroupServiceImpl) groupService)
+                .searchGroupsByKeyword(keyword, pageable);
+
+        return ResponseEntity.ok(ApiResponseDto.success(groups));
+    }
+
+    /**
+     * 인기 그룹 조회
+     * 
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 인기 그룹 목록
+     */
+    @GetMapping("/popular")
+    @Operation(summary = "인기 그룹 조회", description = "참여자 수 기준으로 인기 그룹을 조회합니다.")
+    public ResponseEntity<ApiResponseDto<CommonPageDto<List<GroupListResponseDto>>>> getPopularGroups(
+            @Parameter(description = "페이지 번호") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "20") int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "participants"));
+
+        GroupFilterRequestDto filter = GroupFilterRequestDto.builder()
+                .status("ONGOING")
+                .build();
+
+        CommonPageDto<List<GroupListResponseDto>> groups = groupService.getGroupsWithFilter(pageable, filter);
+        return ResponseEntity.ok(ApiResponseDto.success(groups));
+    }
+
+    /**
+     * 참여 가능한 그룹 조회
+     * 
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 참여 가능한 그룹 목록
+     */
+    @GetMapping("/joinable")
+    @Operation(summary = "참여 가능한 그룹 조회", description = "현재 참여 가능한 상태의 그룹들을 조회합니다.")
+    public ResponseEntity<ApiResponseDto<CommonPageDto<List<GroupListResponseDto>>>> getJoinableGroups(
+            @Parameter(description = "페이지 번호") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "20") int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        GroupFilterRequestDto filter = GroupFilterRequestDto.builder()
+                .status("WAITING")
+                .build();
+
+        CommonPageDto<List<GroupListResponseDto>> groups = groupService.getGroupsWithFilter(pageable, filter);
         return ResponseEntity.ok(ApiResponseDto.success(groups));
     }
 

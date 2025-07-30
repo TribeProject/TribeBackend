@@ -1,14 +1,13 @@
 package com.unity.tribe.common.util;
 
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Component
 public class JwtUtil {
@@ -17,8 +16,8 @@ public class JwtUtil {
     private final long expirationTime;
 
     public JwtUtil(
-            @Value("${jwt.secret:tribe-dev-secret-key-that-is-at-least-256-bits-long-for-security}") String secretKey,
-            @Value("${jwt.expiration:86400000}") long expirationTime) { // 24시간
+            @Value("${jwt.secret}") String secretKey,
+            @Value("${jwt.expiration}") long expirationTime) {
         this.secretKey = secretKey;
         this.expirationTime = expirationTime;
     }

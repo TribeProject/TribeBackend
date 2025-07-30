@@ -7,10 +7,9 @@ plugins {
 group = 'com.unity'
 version = '0.0.1-SNAPSHOT'
 
-// querydsl
-def querydslSrcDir = 'src/main/generated'
+def querydslSrcDir = 'build/generated/sources/annotationProcessor/java/main'
 ext {
-    querydslVersion = '5.0.0'  // 원하는 버전으로 설정
+    querydslVersion = '5.0.0'
 }
 
 java {
@@ -57,9 +56,12 @@ dependencies {
     implementation 'de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0'
 }
 
-// querydsl
 compileJava {
     options.compilerArgs << '-Aquerydsl.generatedAnnotationClass=jakarta.annotation.Generated'
+    options.compilerArgs << "-Aquerydsl.suffix="
+    options.compilerArgs << "-Aquerydsl.entityAccessors=true"
+    options.compilerArgs << '-Xlint:deprecation'
+    options.compilerArgs << '-Xlint:unchecked'
 }
 sourceSets {
     main {
@@ -68,11 +70,9 @@ sourceSets {
         }
     }
 }
-tasks.withType(JavaCompile) {
-    options.generatedSourceOutputDirectory = file(querydslSrcDir)
-}
 clean {
     delete file(querydslSrcDir)
+    delete file('src/main/generated')
 }
 
 

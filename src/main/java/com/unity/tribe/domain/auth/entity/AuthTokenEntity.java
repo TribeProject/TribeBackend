@@ -3,7 +3,13 @@ package com.unity.tribe.domain.auth.entity;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -17,7 +23,7 @@ public class AuthTokenEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "auth_token_id")
-    private String authTokenId;
+    private Long authTokenId;
     @Basic
     @Column(name = "user_id")
     private String userId;
@@ -37,11 +43,11 @@ public class AuthTokenEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public String getAuthTokenId() {
+    public Long getAuthTokenId() {
         return authTokenId;
     }
 
-    public void setAuthTokenId(String authTokenId) {
+    public void setAuthTokenId(Long authTokenId) {
         this.authTokenId = authTokenId;
     }
 
@@ -102,7 +108,10 @@ public class AuthTokenEntity {
             return false;
         }
         AuthTokenEntity that = (AuthTokenEntity) o;
-        return authTokenId == that.authTokenId && Objects.equals(userId, that.userId) && Objects.equals(accessToken, that.accessToken) && Objects.equals(refreshToken, that.refreshToken) && Objects.equals(expiresAt, that.expiresAt) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        return authTokenId == that.authTokenId && Objects.equals(userId, that.userId)
+                && Objects.equals(accessToken, that.accessToken) && Objects.equals(refreshToken, that.refreshToken)
+                && Objects.equals(expiresAt, that.expiresAt) && Objects.equals(createdAt, that.createdAt)
+                && Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
